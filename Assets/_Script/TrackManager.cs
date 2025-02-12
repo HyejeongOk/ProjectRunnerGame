@@ -34,7 +34,8 @@ public class TrackManager : MonoBehaviour
 
         // trackList.Add(track);
 
-        Vector3 position = Vector3.zero;
+        // 초기값 = 카메라의 z좌표
+        Vector3 position = new Vector3(0f, 0f, camTransform.position.z) ;
         // 초기값; 종료조건; 증감;
         for(int i = 0; i < trackCount; i++)
         {   
