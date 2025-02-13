@@ -1,10 +1,11 @@
-using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Track : MonoBehaviour
 {
     public Transform EntryPoint;
     public Transform ExitPoint;
+    [HideInInspector] public List<Transform> lanelist;
 
     [HideInInspector] public TrackManager trackmgr;
 

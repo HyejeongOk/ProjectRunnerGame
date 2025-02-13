@@ -5,6 +5,7 @@ using System;
 public class TrackManager : MonoBehaviour
 {
     public Track trackPrefabs;
+    public PlayerControl playerPrefab;
 
     [Range(0f, 50f)] public float scrollspeed = 10f;
     [Range(1, 100)] public int trackCount = 3;
@@ -12,11 +13,17 @@ public class TrackManager : MonoBehaviour
 
     private List<Track> trackList = new List<Track>();  // 생성한 트랙들 보관
     private Transform camTransform;
+
+    // 상태 정보
+    [HideInInspector] public List<Transform> laneList;  // 현재 트랙의 라인 정보를 전달
+
     void Start()
     {
         // 메인 카메라 Transform을 미리 받아온다. 
         camTransform = Camera.main.transform;
+
         SpawnInitialTrack();
+        SpawnPlayer();
     }
 
     
@@ -70,6 +77,10 @@ public class TrackManager : MonoBehaviour
             
             Next.name = trackname;
             Next.trackmgr = this;
+            
+            laneList  = Next.lanelist;
+
+            Debug.Log($"{laneList}");
 
             trackList.Add(Next);
             return Next;
@@ -94,6 +105,12 @@ public class TrackManager : MonoBehaviour
             trackList.RemoveAt(0);
             
         }
+    }
+
+    void SpawnPlayer()
+    {
+        PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        player.trackMgr = this;
     }
 
 }
