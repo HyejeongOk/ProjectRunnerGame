@@ -4,34 +4,94 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public float horzspeed;
+    // 속성 : 인스펙터 노출
+    [SerializeField] private float speed;
+    [SerializeField] AnimationCurve jumpCurve;  // 점프 모양
+    [SerializeField] float jumpDuration = 0.5f;  // 점프 지속 시간
+    [SerializeField] float jumpHeight = 3f;  // 점프 높이
+
+    // 다른 클래스에 공개는 하지만 인스펙터 노출 안함
     [HideInInspector] public TrackManager trackMgr;
 
-    public int currentLane = 1;
+    // 내부 사용 : 인스펙터 노출 안함
+    private int currentLane = 1;
+
+    private Vector3 targetpos;
+
+    float jumpStarttime;
+    private bool isJumpinging;  //  true : 점프 중, false : 바닥에 붙어있는 중
 
     void Update()
     {
         // -1, 0, 1
 
-        if (Input.GetButtonDown("Left"))  // 왼쪽 이동
+        if (Input.GetButtonDown("Left") && isJumpinging == false)  // 왼쪽 이동
         {
-            currentLane -= 1;
-            currentLane = math.clamp(currentLane, 0, trackMgr.laneList.Count-1);
-            
-            Transform l = trackMgr.laneList[currentLane];
-
-            transform.position = new Vector3(l.position.x, transform.position.y, transform.position.z);
+            HandlePlayer(-1);
         }
 
-        else if (Input.GetButtonDown("Right")) // 오른쪽 이동
+        else if (Input.GetButtonDown("Right") && isJumpinging == false) // 오른쪽 이동
         {
-            currentLane += 1;
-             currentLane = math.clamp(currentLane, 0, trackMgr.laneList.Count-1);
-
-             Transform l = trackMgr.laneList[currentLane];
-             transform.position = new Vector3(l.position.x, transform.position.y, transform.position.z);
+            HandlePlayer(1);
         }
+
+        else if (Input.GetButtonDown("Jump") && isJumpinging == false)  // 점프
+        {
+            jumpStarttime = Time.time;
+            isJumpinging = true;
+        }
+
+        if (isJumpinging == true)
+        {
+            // 점프 시작 후 경과시간 체크
+            float elapsedTime = Time.time - jumpStarttime;
+            // 분자 / 분모 => 퍼센트
+
+            // 0.1 / 0.5 => 20%
+            // 0.2 / 0.5 => 40%
+            // 0.5 / 0.5 => 100%
+            // ---- 점프종료
+
+            float p = Mathf.Clamp(elapsedTime / jumpDuration, 0f, 1f);
+            float height =  jumpCurve.Evaluate(p) * jumpHeight;
+
+            targetpos = new Vector3(transform.position.x, height, transform.position.z);
+
+            // 점프 시간 종료 => isJumping을 false로 바꾼다    
+            if(p >= 1f)
+            {
+                isJumpinging = false;
+                transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+            }
+        }
+
+
 
         // transform.position += Vector3.right * horz * horzspeed * Time.deltaTime;
+
+        UpdatePosition(); 
+        
     }
+
+    // direction -1 이면 왼쪽, +1이면 오른쪽
+    void HandlePlayer(int direction)
+    {
+        currentLane += direction;
+        currentLane = math.clamp(currentLane, 0, trackMgr.laneList.Count-1);
+        
+        Transform l = trackMgr.laneList[currentLane];
+
+        targetpos = new Vector3(l.position.x, transform.position.y, transform.position.z);
+    }
+
+    void UpdatePosition()
+    {
+        // Lerp ? Linear Interpolation : 선형보간
+        transform.position = Vector3.Lerp(transform.position, targetpos, speed * Time.deltaTime);
+    }
+
+    // void UpdateJump()
+    // {
+    //     //
+    // }
 }
