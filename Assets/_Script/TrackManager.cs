@@ -80,7 +80,6 @@ public class TrackManager : MonoBehaviour
             
             laneList  = Next.lanelist;
 
-            Debug.Log($"{laneList}");
 
             trackList.Add(Next);
             return Next;
