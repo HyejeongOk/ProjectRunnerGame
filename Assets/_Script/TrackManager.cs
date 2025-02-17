@@ -4,18 +4,35 @@ using System;
 
 public class TrackManager : MonoBehaviour
 {
+    [Space(20)]
     public Track trackPrefabs;
     public PlayerControl playerPrefab;
 
+    [Space(20)]
     [Range(0f, 50f)] public float scrollspeed = 10f;
     [Range(1, 100)] public int trackCount = 3;
     // public float trackThreshold = 10f; //트랙 삭제 z축
+
+    public Material CurvedMaterial;
+    // public Vector2 CurvedValue;
+
+    // 주기, 진폭
+    [Range(0f, 0.5f)] public float CurvedFrequencyX;  // 주기
+    [Range(0f, 10f)] public float CurvedAmplitudeX; //진폭
+
+    [Range(0f, 0.5f)] public float CurvedFrequencyY;  // 주기
+    [Range(0f, 10f)] public float CurvedAmplitudeY; //진폭
+
 
     private List<Track> trackList = new List<Track>();  // 생성한 트랙들 보관
     private Transform camTransform;
 
     // 상태 정보
     [HideInInspector] public List<Transform> laneList;  // 현재 트랙의 라인 정보를 전달
+
+
+    // 캐시 데이터
+    private int _curveAmount = Shader.PropertyToID("_CurveAmount");
 
     void Start()
     {
@@ -30,6 +47,10 @@ public class TrackManager : MonoBehaviour
     void Update()
     {
        RepositionTrack();
+
+       //float sin = Mathf.Sin(Time.time);
+
+       CurveTrack();
     }
 
     // 초기 트랙 생성 (한번만 실행)
@@ -110,6 +131,23 @@ public class TrackManager : MonoBehaviour
     {
         PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         player.trackMgr = this;
+    }
+
+    void CurveTrack()
+    {
+        // 0f ~ 1f => -1f ~ 1f
+
+       // 0 -> *2 -1 -1
+       // 1 -> *2 -1 1
+       // 0.5 -> *2 1 0
+
+       float rndX = Mathf.PerlinNoise1D(Time.time * CurvedFrequencyX) *2f - 1f;
+       rndX = rndX * CurvedAmplitudeX;
+       float rndY = Mathf.PerlinNoise1D(Time.time * CurvedFrequencyY) *2f - 1f;
+       rndY = rndY * CurvedAmplitudeY;
+
+       
+       CurvedMaterial.SetVector(_curveAmount, new Vector4(rndX, rndY, 0f, 0f));
     }
 
 }

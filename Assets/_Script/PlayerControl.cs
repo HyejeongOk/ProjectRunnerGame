@@ -7,17 +7,21 @@ public class PlayerControl : MonoBehaviour
 {
     // 속성 : 인스펙터 노출
     [SerializeField] Transform pivot;
-    [SerializeField] SquashAndStretchDeformer deformLeft, deformRight, deformJumpUp, deformJumpDown;
+    [SerializeField] SquashAndStretchDeformer deformLeft, deformRight, deformJumpUp, deformJumpDown, deformSlide;
 
 
     [SerializeField] float moveDuration = 0.5f; // 이동에 걸리는 시간
     [SerializeField] Ease moveEase;
 
+    [Space(20)]
     [SerializeField] float jumpDuration = 0.5f;    // 점프 지속 시간
     [SerializeField] float jumpHeight = 3f;      // 점프 높이
     [SerializeField] Ease jumpEase;
 
     [SerializeField] float[] jumpIntervals = { 0.25f, 0.5f, 0.75f, 0.25f }; // 점프 시퀀스 타이밍 조절
+
+    [Space(20)]
+    [SerializeField] float slideDuration = 0.5f;  // 슬라이드 지속 시간
 
 
     // 다른 클래스에 공개는 하지만 인스펙터 노출 안함
@@ -42,7 +46,10 @@ public class PlayerControl : MonoBehaviour
             HandleDirection(1);
         
         if (Input.GetButton("Jump"))
-            HandleJump();          
+            HandleJump(); 
+
+        if (Input.GetButton("Slide"))
+            HandleSlide();         
     }
 
 
@@ -91,8 +98,19 @@ public class PlayerControl : MonoBehaviour
         Sequence seq = DOTween.Sequence().OnComplete( ()=> isJumping = false );
         seq.Append(DOVirtual.Float( 0f, 1f, jumpDuration * jumpIntervals[0], v => deformJumpUp.Factor = v ));
         seq.Append(DOVirtual.Float( 1f, 0f, jumpDuration * jumpIntervals[1], v => deformJumpUp.Factor = v ));        
-        seq.Join(DOVirtual.Float( 0f, 1f, jumpDuration * jumpIntervals[2], v => deformJumpDown.Factor = v ));
-        seq.Append(DOVirtual.Float( 1f, 0f, jumpDuration * jumpIntervals[3], v => deformJumpDown.Factor = v ));        
+        seq.Join(DOVirtual.Float( 0f, -0.25f, jumpDuration * jumpIntervals[2], v => deformJumpDown.Factor = v ));
+        seq.Append(DOVirtual.Float( -0.25f, 0f, jumpDuration * jumpIntervals[3], v => deformJumpDown.Factor = v ));        
+    }
+
+    void HandleSlide()
+    {
+        if ( isMoving == true || isJumping == true ) return;
+
+        isJumping = true;
+
+        Sequence seq = DOTween.Sequence().OnComplete( ()=> isJumping = false );
+        seq.Append(DOVirtual.Float( 0f, -0.15f, slideDuration, v => deformSlide.Factor = v ));
+        seq.Append(DOVirtual.Float( -0.15f, 0f, slideDuration, v => deformSlide.Factor = v ));
     }
 
 }

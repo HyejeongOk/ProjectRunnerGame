@@ -126,6 +126,8 @@ MonoBehaviour:
     active: 1
   - component: {fileID: 6052634992564428052}
     active: 1
+  - component: {fileID: 7671003828017238450}
+    active: 1
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.25, y: 0.25, z: 0.25}
@@ -283,9 +285,61 @@ MonoBehaviour:
     active: 1
   - component: {fileID: 6052634992564428052}
     active: 1
+  - component: {fileID: 7671003828017238450}
+    active: 1
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.25, y: 0.25, z: 0.25}
+--- !u!1 &1344373018262918599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4225199848207293292}
+  - component: {fileID: 7671003828017238450}
+  m_Layer: 0
+  m_Name: DeformSlide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4225199848207293292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344373018262918599}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3736615997105081959}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &7671003828017238450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344373018262918599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ed453254255cb409bad7ea6d0a427c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  update: 1
+  factor: 0
+  curvature: 1
+  top: 0.75
+  bottom: 0
+  axis: {fileID: 4225199848207293292}
 --- !u!1 &2448888897642823456
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,11 +423,18 @@ MonoBehaviour:
   deformRight: {fileID: 3495320124760468589}
   deformJumpUp: {fileID: 3545608020354711656}
   deformJumpDown: {fileID: 6052634992564428052}
+  deformSlide: {fileID: 7671003828017238450}
   moveDuration: 0.2
-  moveEase: 25
-  jumpDuration: 0.5
+  moveEase: 12
+  jumpDuration: 1
   jumpHeight: 3
   jumpEase: 32
+  jumpIntervals:
+  - 0.5
+  - 0.75
+  - 0.75
+  - 0.25
+  slideDuration: 0.5
   trackMgr: {fileID: 0}
 --- !u!1 &3051667983754542444
 GameObject:
@@ -472,7 +533,7 @@ MonoBehaviour:
   update: 1
   factor: 0
   curvature: 1
-  top: 1
+  top: 0.75
   bottom: 0
   axis: {fileID: 3346011794058710952}
 --- !u!1 &4118029626791720084
@@ -522,7 +583,7 @@ MonoBehaviour:
   update: 1
   factor: 0
   curvature: 1
-  top: 1.81
+  top: 0.75
   bottom: 0
   axis: {fileID: 4642085725398678331}
 --- !u!1 &5039416574476795229
@@ -647,6 +708,8 @@ MonoBehaviour:
     active: 1
   - component: {fileID: 6052634992564428052}
     active: 1
+  - component: {fileID: 7671003828017238450}
+    active: 1
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.25, y: 0.25, z: 0.25}
@@ -683,6 +746,7 @@ Transform:
   - {fileID: 1020639370159177900}
   - {fileID: 4642085725398678331}
   - {fileID: 3346011794058710952}
+  - {fileID: 4225199848207293292}
   m_Father: {fileID: 8938886768284325170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8762937034459604620
@@ -806,6 +870,8 @@ MonoBehaviour:
   - component: {fileID: 3545608020354711656}
     active: 1
   - component: {fileID: 6052634992564428052}
+    active: 1
+  - component: {fileID: 7671003828017238450}
     active: 1
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -981,6 +1047,8 @@ MonoBehaviour:
   - component: {fileID: 3545608020354711656}
     active: 1
   - component: {fileID: 6052634992564428052}
+    active: 1
+  - component: {fileID: 7671003828017238450}
     active: 1
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}

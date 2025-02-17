@@ -1530,10 +1530,10 @@
     "m_Guid": {
         "m_GuidSerialized": "c52bf7c8-0cf5-4c8e-9f1c-692e93c00c76"
     },
-    "m_Name": "Offset",
+    "m_Name": "CurveAmount",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Offset",
-    "m_DefaultReferenceName": "_Offset",
+    "m_RefNameGeneratedByDisplayName": "CurveAmount",
+    "m_DefaultReferenceName": "_CurveAmount",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1852,7 +1852,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
     "m_ObjectId": "7244f1b327994e1094e53ee8782f6c85",
     "m_Id": 0,
-    "m_DisplayName": "Offset",
+    "m_DisplayName": "CurveAmount",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
