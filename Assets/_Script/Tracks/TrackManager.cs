@@ -11,6 +11,7 @@ public class TrackManager : MonoBehaviour
     [Space(20)]
     [Range(0f, 50f)] public float scrollspeed = 10f;
     [Range(1, 100)] public int trackCount = 3;
+    [Range(1,5)] public int countdown = 3;
     // public float trackThreshold = 10f; //트랙 삭제 z축
 
     [Space(20)]
@@ -35,7 +36,7 @@ public class TrackManager : MonoBehaviour
     // 캐시 데이터
     private int _curveAmount = Shader.PropertyToID("_CurveAmount");
 
-    IEnumerator Start()
+    void Start()
     {
         // 메인 카메라 Transform을 미리 받아온다. 
         camTransform = Camera.main.transform;
@@ -43,13 +44,7 @@ public class TrackManager : MonoBehaviour
         SpawnInitialTrack();
         SpawnPlayer();
 
-        Debug.Log("3");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("2");
-        yield return new WaitForSeconds(1f);
-        Debug.Log("1");
-        yield return new WaitForSeconds(1f);
-        GameManager.IsPlaying = true;
+       StartCoroutine(CountdownTrack());
     }
 
     
@@ -87,6 +82,7 @@ public class TrackManager : MonoBehaviour
 
             position = next.ExitPoint.position;
         }
+        BendTrack();
     }
 
     void ScrollTrack()
@@ -138,6 +134,7 @@ public class TrackManager : MonoBehaviour
         }
     }
 
+    float elapsedTime;
     void BendTrack()
     {
         if (scrollspeed <= 0f) return;
@@ -148,9 +145,11 @@ public class TrackManager : MonoBehaviour
        // 1 -> *2 -1 1
        // 0.5 -> *2 1 0
 
-       float rndX = Mathf.PerlinNoise1D(Time.time * CurvedFrequencyX) *2f - 1f;
+        elapsedTime += Time.deltaTime;
+
+       float rndX = Mathf.PerlinNoise1D(elapsedTime * CurvedFrequencyX) *2f - 1f;
        rndX = rndX * CurvedAmplitudeX;
-       float rndY = Mathf.PerlinNoise1D(Time.time * CurvedFrequencyY) *2f - 1f;
+       float rndY = Mathf.PerlinNoise1D(elapsedTime * CurvedFrequencyY) *2f - 1f;
        rndY = rndY * CurvedAmplitudeY;
        
        CurvedMaterial.SetVector(_curveAmount, new Vector4(rndX, rndY, 0f, 0f));
@@ -173,6 +172,17 @@ public class TrackManager : MonoBehaviour
         scrollspeed = 0f;
     }
 
+    private IEnumerator CountdownTrack()
+    {
+         // countdown으로 반복문 처리하기
+        for(int i = countdown; i > 0; i-- )
+        {
+            Debug.Log(i);
+            yield return new WaitForSeconds(1f);
+        }
+        GameManager.IsPlaying = true;
+    }
+    
      void SpawnPlayer()
     {
         PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);

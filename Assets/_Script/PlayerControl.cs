@@ -56,6 +56,12 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
+        // [CHEAT]
+        // 1 키 토글, 처음 => 멈춤, 다시 => 재개
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            GameManager.IsPlaying = !GameManager.IsPlaying;
+
+
         if (pivot == null || GameManager.IsPlaying == false)
             return;
 
@@ -70,6 +76,7 @@ public class PlayerControl : MonoBehaviour
 
         if (Input.GetButton("Slide"))
             HandleSlide();         
+        
     }
 
     void OnTriggerEnter(Collider other)

@@ -16,7 +16,7 @@ public class ObstacleManager : MonoBehaviour
         if (tm == null || tm.Length <= 0)
         {
             Debug.LogError($"트랙 관리자 없음");
-            yield break;  
+            yield break;   // return과 동일 : 함수 완전 탈출
         } 
 
         trackMgr = tm[0];
@@ -55,9 +55,11 @@ public class ObstacleManager : MonoBehaviour
    IEnumerator InfiniteSpawn()
    {
         while(true)
-        {   
-            if (GameManager.IsPlaying == false)
-                yield break;
+        {   yield return new WaitUntil( () => GameManager.IsPlaying);
+        
+            // if (GameManager.IsPlaying == false)
+                // yield return null;
+                // yield break;
 
             SpawnObstacle(Random.Range(0,trackMgr.laneList.Count));
             yield return new WaitForSeconds(spawnInterval);
