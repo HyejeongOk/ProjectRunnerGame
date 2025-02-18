@@ -6,11 +6,16 @@ public class Track : MonoBehaviour
     public Transform EntryPoint;
     public Transform ExitPoint;
     [HideInInspector] public List<Transform> lanelist;
+    
+    public Transform ObstacleRoot;
 
     [HideInInspector] public TrackManager trackmgr;
 
     void LateUpdate()
     {
+        if(GameManager.IsPlaying == false) 
+            return;
+
         Scroll();
     }
 
@@ -25,6 +30,8 @@ public class Track : MonoBehaviour
     // Time.smoothDeltaTime => deltaTime 평균 => 값이 고르게 나온다
 
     // fixedDelta < delta < smoothDelta
+
+        //Debug.Log($"{name} : local = {EntryPoint.localPosition}, wolrd = {EntryPoint.position}");
     
     }
 }

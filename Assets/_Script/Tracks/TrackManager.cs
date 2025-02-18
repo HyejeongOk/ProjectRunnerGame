@@ -1,27 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
+using System.Collections;
 
 public class TrackManager : MonoBehaviour
 {
     [Space(20)]
-    public Track trackPrefabs;
-    public PlayerControl playerPrefab;
+    [SerializeField] Track trackPrefabs;
+    [SerializeField] PlayerControl playerPrefab;
 
     [Space(20)]
     [Range(0f, 50f)] public float scrollspeed = 10f;
     [Range(1, 100)] public int trackCount = 3;
     // public float trackThreshold = 10f; //트랙 삭제 z축
 
-    public Material CurvedMaterial;
+    [Space(20)]
+    [SerializeField] Material CurvedMaterial;
     // public Vector2 CurvedValue;
 
     // 주기, 진폭
-    [Range(0f, 0.5f)] public float CurvedFrequencyX;  // 주기
-    [Range(0f, 10f)] public float CurvedAmplitudeX; //진폭
+    [Range(0f, 0.5f), SerializeField] public float CurvedFrequencyX;  // 주기
+    [Range(0f, 10f), SerializeField] public float CurvedAmplitudeX; //진폭
 
-    [Range(0f, 0.5f)] public float CurvedFrequencyY;  // 주기
-    [Range(0f, 10f)] public float CurvedAmplitudeY; //진폭
+    [Range(0f, 0.5f), SerializeField] public float CurvedFrequencyY;  // 주기
+    [Range(0f, 10f), SerializeField] public float CurvedAmplitudeY; //진폭
 
 
     private List<Track> trackList = new List<Track>();  // 생성한 트랙들 보관
@@ -34,23 +35,33 @@ public class TrackManager : MonoBehaviour
     // 캐시 데이터
     private int _curveAmount = Shader.PropertyToID("_CurveAmount");
 
-    void Start()
+    IEnumerator Start()
     {
         // 메인 카메라 Transform을 미리 받아온다. 
         camTransform = Camera.main.transform;
 
         SpawnInitialTrack();
         SpawnPlayer();
+
+        Debug.Log("3");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("2");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("1");
+        yield return new WaitForSeconds(1f);
+        GameManager.IsPlaying = true;
     }
 
     
     void Update()
     {
+        if(GameManager.IsPlaying == false) return;
+
        RepositionTrack();
 
        //float sin = Mathf.Sin(Time.time);
 
-       CurveTrack();
+       BendTrack();
     }
 
     // 초기 트랙 생성 (한번만 실행)
@@ -127,14 +138,10 @@ public class TrackManager : MonoBehaviour
         }
     }
 
-    void SpawnPlayer()
+    void BendTrack()
     {
-        PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        player.trackMgr = this;
-    }
+        if (scrollspeed <= 0f) return;
 
-    void CurveTrack()
-    {
         // 0f ~ 1f => -1f ~ 1f
 
        // 0 -> *2 -1 -1
@@ -145,9 +152,30 @@ public class TrackManager : MonoBehaviour
        rndX = rndX * CurvedAmplitudeX;
        float rndY = Mathf.PerlinNoise1D(Time.time * CurvedFrequencyY) *2f - 1f;
        rndY = rndY * CurvedAmplitudeY;
-
        
        CurvedMaterial.SetVector(_curveAmount, new Vector4(rndX, rndY, 0f, 0f));
     }
 
+    // z 값에 해당하는 트랙을 가져오기
+    public Track GetTrackByZ(float z)
+    {
+        // 해당하는 트랙 찾아서 반환
+        foreach(var t in trackList)
+        {
+            if( z > t.EntryPoint.position.z && z <= t.ExitPoint.position.z)
+                return t;
+        }
+        return null;
+    }
+
+    public void StopScrollTrack()
+    {
+        scrollspeed = 0f;
+    }
+
+     void SpawnPlayer()
+    {
+        PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        player.trackMgr = this;
+    }
 }
