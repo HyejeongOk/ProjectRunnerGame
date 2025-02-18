@@ -9,9 +9,13 @@ public static class GameManager
 {
     // 전역 변수
     public static bool IsPlaying = false;
+    
+    //이동 거리
+    public static float mileage = 0f; 
 
     // 전역 함수 (Method)
     // public static void Function1()
     // {
     // }
+
 }

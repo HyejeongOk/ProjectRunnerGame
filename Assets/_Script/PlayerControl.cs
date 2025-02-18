@@ -83,8 +83,8 @@ public class PlayerControl : MonoBehaviour
     {
         if(other)
         {
-            Debug.Log($"충돌 {other}");
-            trackMgr.StopScrollTrack();
+            GameManager.IsPlaying = false;
+            
         }
     }
 

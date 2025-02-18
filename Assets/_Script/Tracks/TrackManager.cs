@@ -57,6 +57,8 @@ public class TrackManager : MonoBehaviour
        //float sin = Mathf.Sin(Time.time);
 
        BendTrack();
+
+       GameManager.mileage += scrollspeed * Time.smoothDeltaTime;
     }
 
     // 초기 트랙 생성 (한번만 실행)

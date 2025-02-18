@@ -484,7 +484,7 @@ MonoBehaviour:
   moveDuration: 0.2
   moveEase: 12
   jumpDuration: 1
-  jumpHeight: 3
+  jumpHeight: 2
   jumpEase: 32
   jumpIntervals:
   - 0.5
