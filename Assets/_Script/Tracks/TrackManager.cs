@@ -185,7 +185,7 @@ public class TrackManager : MonoBehaviour
     
      void SpawnPlayer()
     {
-        PlayerControl player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        PlayerControl player = Instantiate(playerPrefab, new Vector3(-0.21f, 0f, 0f), Quaternion.identity);
         player.trackMgr = this;
     }
 }

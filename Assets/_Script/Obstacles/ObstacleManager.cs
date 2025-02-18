@@ -1,9 +1,17 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
+// enum : Enumerator
+public enum ObstacleType{ Single, Top, Bottom, _MAX_ /*, Double, Tripple */}
 public class ObstacleManager : MonoBehaviour
 {
-    [SerializeField] Obstacle obstaclePrefab;
+    [Space(20)]
+    [SerializeField] List<Obstacle> obstacleSingle;
+    [SerializeField] List<Obstacle> obstacleTop;
+    [SerializeField] List<Obstacle> obstacleBottom;
+
+    [Space(20)]
     [SerializeField] Transform spawnPoint;
     [SerializeField] float spawnInterval = 1f;
 
@@ -49,7 +57,10 @@ public class ObstacleManager : MonoBehaviour
             return;
         }
 
-        Obstacle o = Instantiate(obstaclePrefab, pos, Quaternion.identity, t.ObstacleRoot);
+        var obstacle = RandomTypeSpawn();
+
+        Instantiate(obstacle, pos, Quaternion.identity, t.ObstacleRoot);
+        
    }
 
    IEnumerator InfiniteSpawn()
@@ -65,4 +76,23 @@ public class ObstacleManager : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
         }
    } 
+
+   Obstacle RandomTypeSpawn()
+   {
+        // 랜덤1 : ObstacleType
+
+        int rndType = Random.Range((int)ObstacleType.Single, (int)ObstacleType._MAX_);
+        
+        List<Obstacle> obstacles = rndType switch { 
+            (int)ObstacleType.Single => obstacleSingle,
+            (int)ObstacleType.Top => obstacleTop,
+            (int)ObstacleType.Bottom => obstacleBottom,
+            _ => null
+            };
+
+        // 랜덤2 : Variant
+        Obstacle prefab = obstacles[Random.Range(0, obstacles.Count)];
+
+        return prefab;
+   }
 }

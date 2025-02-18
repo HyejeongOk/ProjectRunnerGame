@@ -489,9 +489,9 @@ MonoBehaviour:
   jumpIntervals:
   - 0.5
   - 0.75
-  - 0.75
+  - 0.5
   - 0.25
-  slideDuration: 0.5
+  slideDuration: 0.7
   trackMgr: {fileID: 0}
   state: 0
 --- !u!54 &2006738492524352087
