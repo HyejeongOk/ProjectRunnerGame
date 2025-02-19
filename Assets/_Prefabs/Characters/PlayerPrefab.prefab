@@ -483,14 +483,14 @@ MonoBehaviour:
   deformSlide: {fileID: 7671003828017238450}
   moveDuration: 0.2
   moveEase: 12
-  jumpDuration: 1
+  jumpDuration: 0.5
   jumpHeight: 2
   jumpEase: 32
   jumpIntervals:
   - 0.5
-  - 0.75
   - 0.5
-  - 0.25
+  - 0.2
+  - 0.01
   slideDuration: 0.7
   trackMgr: {fileID: 0}
   state: 0
