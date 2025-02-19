@@ -65,15 +65,29 @@ public class ObstacleManager : MonoBehaviour
 
    IEnumerator InfiniteSpawn()
    {
+        double lastMileage = 0;
         while(true)
-        {   yield return new WaitUntil( () => GameManager.IsPlaying);
-        
-            // if (GameManager.IsPlaying == false)
-                // yield return null;
-                // yield break;
+        {   
+            yield return new WaitUntil( () => GameManager.IsPlaying);
 
-            SpawnObstacle(Random.Range(0,trackMgr.laneList.Count));
-            yield return new WaitForSeconds(spawnInterval);
+            // 1m 거리 간격 이상일 때만 장애물을 생성한다.
+            // 5m - 0m = 5 > 1m 성립 => lastMileage = 5m
+            // 5.5m - 5m = 0.5m > 1m 패스
+            // 6.2m - 5m = 1.2m > 1m 성립 => lastMileage = 6.2m
+            
+            if(GameManager.mileage - lastMileage > spawnInterval)
+            {
+                SpawnObstacle(Random.Range(0,trackMgr.laneList.Count));
+                lastMileage = GameManager.mileage;
+            }
+            
+        
+            // // if (GameManager.IsPlaying == false)
+            //     // yield return null;
+            //     // yield break;
+
+            // 시간 기반
+            // yield return new WaitForSeconds(spawnInterval);
         }
    } 
 

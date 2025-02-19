@@ -11,7 +11,7 @@ public static class GameManager
     public static bool IsPlaying = false;
     
     //이동 거리
-    public static float mileage = 0f; 
+    public static double mileage;
 
     // 전역 함수 (Method)
     // public static void Function1()

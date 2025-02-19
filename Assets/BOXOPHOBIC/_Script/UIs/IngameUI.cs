@@ -9,14 +9,30 @@ public class IngameUI : MonoBehaviour
     {
         
     }
-
+    
+    public long test;
     void Update()
     {
         if (GameManager.IsPlaying == false)
             return;
 
-        // 정수, 소수점
-        tmDistance.text = ((int)GameManager.mileage).ToStringKilo() + "<size=80%>m</size>";
+        // 작은 수 표현
+        if(GameManager.mileage <= 1000f)
+        {
+            long intpart = (long)GameManager.mileage;
+            double decpart = (int)((GameManager.mileage - intpart)*10);
+            tmDistance.text = $"{intpart}<size=80%>.{decpart}</size><size=60%>m</size>";
+        }
+
+        // 큰 수 표현
+        else
+        {
+            // 정수, 소수점
+            ((long)GameManager.mileage).ToStringKilo(out string intpart, out string decpart, out string  unitpart);
+            
+            tmDistance.text = $"{intpart}<size=80%>{decpart}{unitpart}</size><size=60%>m</size>";
+        }
+
     }
 
     // Utility : 정수부분 + 실수부분을 나눠서 string으로 전달
