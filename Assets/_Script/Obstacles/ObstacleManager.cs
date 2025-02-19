@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // enum : Enumerator
-public enum ObstacleType{ Single, Top, Bottom, _MAX_ /*, Double, Tripple */}
+public enum ObstacleType{ Single, Double, Triple, _MAX_ }
 public class ObstacleManager : MonoBehaviour
 {
     [Space(20)]
     [SerializeField] List<Obstacle> obstacleSingle;
-    [SerializeField] List<Obstacle> obstacleTop;
-    [SerializeField] List<Obstacle> obstacleBottom;
+    [SerializeField] List<Obstacle> obstacleDouble;
+    [SerializeField] List<Obstacle> obstacleTriple;
 
     [Space(20)]
-    [SerializeField] Transform spawnPoint;
+    [SerializeField] float spawnZpos = 60f;
     [SerializeField] float spawnInterval = 1f;
 
     private TrackManager trackMgr;
@@ -40,27 +40,25 @@ public class ObstacleManager : MonoBehaviour
     }
 
     //장애물 생성 (lane = 0, 1, 2)
-    public void SpawnObstacle(int lane)
+    public void SpawnObstacle()
    {
-        // Lane 위치
-        lane = Mathf.Clamp(lane, 0, trackMgr.laneList.Count-1);
-        Transform laneTransform = trackMgr.laneList[lane];
-        Vector3 pos = new Vector3(laneTransform.position.x, laneTransform.position.y, spawnPoint.position.z);
-        
+        (int lane, Obstacle prefab) = RandomLanePrefab();
+
         // Z 위치
         // 현재 해당 트랙의 자식으로 넣는다
         // 현재 해당 트랙 ?
-        Track t = trackMgr.GetTrackByZ(spawnPoint.position.z);
+        Track t = trackMgr.GetTrackByZ(spawnZpos);
         if (t == null)
         {
             Debug.LogWarning("Z 위치에 해당하는 트랙이 없음");
             return;
         }
 
-        var obstacle = RandomTypeSpawn();
-
-        Instantiate(obstacle, pos, Quaternion.identity, t.ObstacleRoot);
-        
+        if(prefab != null)
+        {
+            var o = Instantiate(prefab, t.ObstacleRoot);
+            o.SetLanePosition(lane, spawnZpos, trackMgr);
+        }
    }
 
    IEnumerator InfiniteSpawn()
@@ -77,11 +75,10 @@ public class ObstacleManager : MonoBehaviour
             
             if(GameManager.mileage - lastMileage > spawnInterval)
             {
-                SpawnObstacle(Random.Range(0,trackMgr.laneList.Count));
+                SpawnObstacle();
                 lastMileage = GameManager.mileage;
             }
             
-        
             // // if (GameManager.IsPlaying == false)
             //     // yield return null;
             //     // yield break;
@@ -91,22 +88,27 @@ public class ObstacleManager : MonoBehaviour
         }
    } 
 
-   Obstacle RandomTypeSpawn()
+    // TEMPCODE
+   (int, Obstacle) RandomLanePrefab()
    {
-        // 랜덤1 : ObstacleType
-
+        // 랜덤1 : Lane을 랜덤 생성
+        int rndLane = Random.Range(0, trackMgr.laneList.Count);
+        // 랜덤2 : Prefab 타입 랜덤 생성
         int rndType = Random.Range((int)ObstacleType.Single, (int)ObstacleType._MAX_);
         
         List<Obstacle> obstacles = rndType switch { 
             (int)ObstacleType.Single => obstacleSingle,
-            (int)ObstacleType.Top => obstacleTop,
-            (int)ObstacleType.Bottom => obstacleBottom,
+            (int)ObstacleType.Double => obstacleDouble,
+            (int)ObstacleType.Triple => obstacleTriple,
             _ => null
             };
+        if (obstacles.Count <= 0 )
+            return (-1, null);
 
-        // 랜덤2 : Variant
         Obstacle prefab = obstacles[Random.Range(0, obstacles.Count)];
+        if(prefab == null) 
+            return (-1, null);
 
-        return prefab;
+        return (rndLane, prefab);
    }
 }
