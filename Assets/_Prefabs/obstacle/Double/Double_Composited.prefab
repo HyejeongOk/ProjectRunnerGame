@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   compositedPrefabs:
-  - {fileID: 8077482766108391041, guid: ec83e637e7971234fa5c617f53b7e068, type: 3}
-  - {fileID: 297483313628299294, guid: 098e957a5b54d3f4baea6530bb0d72d8, type: 3}
-  - {fileID: 1990717812439835856, guid: df101410ee9e0c24aa8a4d4989117160, type: 3}
+  - {fileID: 8619320517215861680, guid: ec83e637e7971234fa5c617f53b7e068, type: 3}
+  - {fileID: 4249553638966229876, guid: 098e957a5b54d3f4baea6530bb0d72d8, type: 3}
+  - {fileID: 8979986411634251633, guid: df101410ee9e0c24aa8a4d4989117160, type: 3}
+  - {fileID: 7910699498191293681, guid: 3b5bb05371d91444aa9a6b119c860185, type: 3}

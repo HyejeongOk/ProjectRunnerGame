@@ -402,7 +402,7 @@ PrefabInstance:
     - target: {fileID: 3105761596583310646, guid: 73984b18d8624134abfc3b3b19f4211f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 1463268049}
+      objectReference: {fileID: 817398874}
     m_RemovedComponents:
     - {fileID: 2855701780940490794, guid: 73984b18d8624134abfc3b3b19f4211f, type: 3}
     m_RemovedGameObjects: []
@@ -926,12 +926,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4404282731496076, guid: 83a1cd78257cf8745bfb091b21db28de, type: 3}
   m_PrefabInstance: {fileID: 303871135}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &812833491 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4404282731496076, guid: 83a1cd78257cf8745bfb091b21db28de, type: 3}
-  m_PrefabInstance: {fileID: 2082611482}
-  m_PrefabAsset: {fileID: 0}
---- !u!21 &827987231
+--- !u!21 &701673485
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -999,6 +994,64 @@ Material:
     - _FogColorEnd: {r: 0.8862745, g: 1.443137, b: 2, a: 1}
     - _FogColorStart: {r: 0.4411765, g: 0.722515, b: 1, a: 1}
     - _NoiseSpeed: {r: 0.5, g: 0, b: 0.5, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!4 &812833491 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4404282731496076, guid: 83a1cd78257cf8745bfb091b21db28de, type: 3}
+  m_PrefabInstance: {fileID: 2082611482}
+  m_PrefabAsset: {fileID: 0}
+--- !u!21 &817398874
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Height Fog Global
+  m_Shader: {fileID: 4800000, guid: 3a7ef1b66bafb7a448a880ef76d2e6e6, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3002
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AdvancedCat: 1
+    - _AlphaCutoff: 0.5
+    - _Banner: 1
+    - _DirectionalCat: 1
+    - _FogCameraMode: 0
+    - _FogCat: 1
+    - _HeightFogGlobal: 1
+    - _IsHeightFogShader: 1
+    - _NoiseCat: 1
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _SkyboxCat: 1
+    m_Colors:
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!1 &832575517
@@ -1223,12 +1276,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleSingle:
-  - {fileID: 297483313628299294, guid: 098e957a5b54d3f4baea6530bb0d72d8, type: 3}
+  - {fileID: 8619320517215861680, guid: ec83e637e7971234fa5c617f53b7e068, type: 3}
+  - {fileID: 4249553638966229876, guid: 098e957a5b54d3f4baea6530bb0d72d8, type: 3}
+  - {fileID: 8979986411634251633, guid: df101410ee9e0c24aa8a4d4989117160, type: 3}
+  - {fileID: 7910699498191293681, guid: 3b5bb05371d91444aa9a6b119c860185, type: 3}
   obstacleDouble:
+  - {fileID: 7424176787490981662, guid: 9481497ea0088dc489e07c054090b1ce, type: 3}
+  - {fileID: 5273970638149774027, guid: ebc659757d43bec4785852bb0b8c2d92, type: 3}
   - {fileID: 1438721163256483510, guid: e944e124df42efe4b9c63e4432e1058e, type: 3}
   obstacleTriple:
-  - {fileID: 7424176787490981662, guid: 9481497ea0088dc489e07c054090b1ce, type: 3}
-  spawnZpos: 60
+  - {fileID: 7826849843589995231, guid: 637f46f4c8c5ac64a99dc648d034f3e2, type: 3}
+  - {fileID: 8324015615485997778, guid: db37a6d3dcf14d6429a2250a42990321, type: 3}
+  spawnZpos: 50
   spawnInterval: 25
 --- !u!4 &1001766453
 Transform:
@@ -1519,8 +1578,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trackPrefabs: {fileID: 7260368558642044781, guid: 68da6b9cbaa0e4946accb04bf26adf9f, type: 3}
   playerPrefab: {fileID: 4724112873316023336, guid: 95557e09e4f3f434a8779be3d1c52e78, type: 3}
-  scrollspeed: 30.3
-  trackCount: 7
+  scrollspeed: 20
+  trackCount: 5
   countdown: 3
   CurvedMaterial: {fileID: 2100000, guid: 53595997b536a444faad1f1989a5afcb, type: 2}
   CurvedFrequencyX: 0.071
@@ -1543,7 +1602,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1463268049
+--- !u!21 &1636183293
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -1854,7 +1913,7 @@ MonoBehaviour:
   renderPriority: 2
   manualPositionAndScale: 0
   styledSpace0: 0
-  overrideMaterial: {fileID: 827987231}
+  overrideMaterial: {fileID: 701673485}
   overrideCamToVolumeDistance: 1
   overrideVolumeDistanceFade: 0
   version: 0

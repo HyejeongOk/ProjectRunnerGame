@@ -56,7 +56,7 @@ public class ObstacleManager : MonoBehaviour
 
         if(prefab != null)
         {
-            var o = Instantiate(prefab, t.ObstacleRoot);
+            Obstacle o = Instantiate(prefab, t.ObstacleRoot);
             o.SetLanePosition(lane, spawnZpos, trackMgr);
         }
    }

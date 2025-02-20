@@ -1,20 +1,11 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-// 싱글 형태 장애물
+// abstract 추상 클래스
+// Obstacle 타입들의 근본
 // 베이스 클래스 
-public class Obstacle : MonoBehaviour
+public abstract class Obstacle : MonoBehaviour
 {
-    public virtual void SetLanePosition(int lane, float zpos, TrackManager tm)
-    {
-        // Lane 위치
-        lane = Mathf.Clamp(lane, 0, tm.laneList.Count-1);
-        Transform laneTransform = tm.laneList[lane];
-        Vector3 pos = new Vector3(laneTransform.position.x, laneTransform.position.y, zpos);
-        
-        //Instantiate(프리팹, 포지션, 회전, 부모);
-        //Instantiate(프리팹, 부모);  // 생성만 + 부모까지
-        //SetPositionAndRotation(포지션, 회전);
-        transform.SetPositionAndRotation(pos, quaternion.identity);
-    }
+    public abstract void SetLanePosition(int lane, float zpos, TrackManager tm);
+   
 }
