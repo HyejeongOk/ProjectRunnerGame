@@ -1,12 +1,18 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using CustomInspector;
 
 
 public class IngameUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI tmDistance;
+    [HorizontalLine]
     [SerializeField] TextMeshProUGUI tmInfomation;
+
+    [HorizontalLine]
+    [SerializeField] TextMeshProUGUI tmMileage;
+    [SerializeField] TextMeshProUGUI tmCoin;
+    [SerializeField] TextMeshProUGUI tmHealth;
 
     void Awake()
     {
@@ -14,18 +20,30 @@ public class IngameUI : MonoBehaviour
 
     }
 
-    void Start()
-    {
-        //tmInfomation.gameObject.SetActive(false);
-    }
-    
-    public long test;
     void Update()
     {
-        if (GameManager.IsPlaying == false)
-            return;
-
+        UpdateCoins();
         UpdateMileage();
+    }
+
+    Sequence _seqInfo;
+    public void ShowInfo(string info, float duration = 1f)
+    {
+        tmInfomation.transform.localScale = Vector3.zero;
+
+        if(_seqInfo != null)
+            _seqInfo.Kill(true);
+
+        // 숫자 시작할 때 크기 120% -> 100% -> 0%
+        // 모든 연출은 duration 동안 완료되도록
+        // duration 전체 길이 => 연출이 duration 안에 종료되도록
+        _seqInfo = DOTween.Sequence();
+        _seqInfo.AppendCallback(() => tmInfomation.text = info);
+        _seqInfo.Append(tmInfomation.transform.DOScale(1.2f, duration * 0.1f));
+        _seqInfo.Append(tmInfomation.transform.DOScale(1f, duration * 0.4f));
+        _seqInfo.AppendInterval(duration*0.2f);
+        _seqInfo.Append(tmInfomation.transform.DOScale(0f, duration * 0.1f));
+
     }
 
     void UpdateMileage()
@@ -36,7 +54,7 @@ public class IngameUI : MonoBehaviour
         {
             long intpart = (long)GameManager.mileage;
             double decpart = (int)((GameManager.mileage - intpart)*10);
-            tmDistance.text = $"{intpart}<size=80%>.{decpart}</size><size=60%>m</size>";
+            tmMileage.text = $"{intpart}<size=80%>.{decpart}</size><size=60%>m</size>";
         }
 
         // 큰 수 표현
@@ -45,31 +63,39 @@ public class IngameUI : MonoBehaviour
             // 정수, 소수점
             ((long)GameManager.mileage).ToStringKilo(out string intpart, out string decpart, out string  unitpart);
             
-            tmDistance.text = $"{intpart}<size=80%>{decpart}{unitpart}</size><size=60%>m</size>";
+            tmMileage.text = $"{intpart}<size=80%>{decpart}{unitpart}</size><size=60%>m</size>";
         }
 
     }
-    
-    Sequence _seqInfo;
-    public void ShowInfo(string info, float duration = 1f)
+    // 코인 획득 시, 
+    // UI 숫자 120% -> 100% 애니메이션
+    // Tween -> Update, OneTime
+    // Event 호출
+    // Player -> 코인획득 -> GM -> UI 호출
+    // Event Driven (이벤트 주도 방식)
+
+    // Send, Receive
+    // Player -> 사건 -> Manager 방송 (송출, 수신)
+
+    private uint _lastcoins;
+    private Tween _tweeencoin;
+    void UpdateCoins()
     {
-        tmInfomation.transform.localScale = Vector3.zero;
+        if(_lastcoins == GameManager.coins)
+            return;
 
-        if(_seqInfo != null)
-            _seqInfo.Kill(true);
+        if(_tweeencoin != null)
+            _tweeencoin.Kill(true);
 
+        // "N0" 역할 12345 => 12,345
+        tmCoin.text = GameManager.coins.ToString("N0");
+        _lastcoins = GameManager.coins;
 
-        // duration 전체 길이 => 연출이 duration 안에 종료되도록
-        _seqInfo = DOTween.Sequence();
-        _seqInfo.AppendCallback(() => tmInfomation.text = info);
-        _seqInfo.Append(tmInfomation.transform.DOScale(1.2f, duration * 0.1f));
-        _seqInfo.Append(tmInfomation.transform.DOScale(1f, duration * 0.4f));
-        _seqInfo.AppendInterval(duration*0.2f);
-        _seqInfo.Append(tmInfomation.transform.DOScale(0f, duration * 0.1f));
-
-        // 숫자 시작할 때 크기 120% -> 100% -> 0%
-        // 모든 연출은 duration 동안 완료되도록
+        tmCoin.rectTransform.localScale = Vector3.one;
+        _tweeencoin = tmCoin.rectTransform.DOPunchScale(Vector3.one*0.5f, 0.2f, 10, 1)
+                        .OnComplete(() => tmCoin.rectTransform.localScale = Vector3.one);
     }
+    
 
     // Utility : 정수부분 + 실수부분을 나눠서 string으로 전달
     // 예 123.456f => 123 + 456 => string 결합

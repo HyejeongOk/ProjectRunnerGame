@@ -79,9 +79,17 @@ public class PlayerControl : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other)
+        if(other.tag == "Collectable")
         {
+            Debug.Log($"Collectable 획득 : {other.name}");
+            GameManager.coins++;
+        }
+
+        else if (other.tag == "Obstacle")
+        {
+            Debug.Log($"장애물 충돌 : {other.name}");
             GameManager.IsPlaying = false;   
+
         }
     }
 
