@@ -8,6 +8,7 @@ public class Track : MonoBehaviour
     [HideInInspector] public List<Transform> lanelist;
     
     public Transform ObstacleRoot;
+    public Transform CollectableRoot;
 
     [HideInInspector] public TrackManager trackmgr;
 

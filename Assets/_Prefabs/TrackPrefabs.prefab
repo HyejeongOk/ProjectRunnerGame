@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5234953880575745334}
   m_Layer: 0
-  m_Name: Obstacle
+  m_Name: ObstacleRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7001528331289452808}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4298043538934520259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 876385610806940273}
+  m_Layer: 0
+  m_Name: CollectableRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &876385610806940273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4298043538934520259}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5724962971402237457}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5082492697817971924
 GameObject:
@@ -294,6 +325,7 @@ Transform:
   - {fileID: 7271762229658259146}
   - {fileID: 7001528331289452808}
   - {fileID: 5234953880575745334}
+  - {fileID: 876385610806940273}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7260368558642044781
@@ -315,6 +347,7 @@ MonoBehaviour:
   - {fileID: 2986516740493112323}
   - {fileID: 1908571617766621700}
   ObstacleRoot: {fileID: 5234953880575745334}
+  CollectableRoot: {fileID: 876385610806940273}
   trackmgr: {fileID: 0}
 --- !u!1001 &1260639278462047068
 PrefabInstance:

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomInspector;
 
-// enum : Enumerator
-public enum ObstacleType{ Single, Double, Triple, _MAX_ }
-
 [System.Serializable]
 public class ObstaclePool : RandomItem
 {

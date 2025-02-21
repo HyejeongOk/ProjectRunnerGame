@@ -81,13 +81,11 @@ public class PlayerControl : MonoBehaviour
     {
         if(other.tag == "Collectable")
         {
-            Debug.Log($"Collectable 획득 : {other.name}");
-            GameManager.coins++;
+            other.GetComponentInParent<Collectable>()?.Collect();            
         }
 
         else if (other.tag == "Obstacle")
         {
-            Debug.Log($"장애물 충돌 : {other.name}");
             GameManager.IsPlaying = false;   
 
         }
