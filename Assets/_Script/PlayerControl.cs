@@ -61,7 +61,6 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
             GameManager.IsPlaying = !GameManager.IsPlaying;
 
-
         if (pivot == null || GameManager.IsPlaying == false)
             return;
 
@@ -76,15 +75,13 @@ public class PlayerControl : MonoBehaviour
 
         if (Input.GetButton("Slide"))
             HandleSlide();         
-        
     }
 
     void OnTriggerEnter(Collider other)
     {
         if(other)
         {
-            GameManager.IsPlaying = false;
-            
+            GameManager.IsPlaying = false;   
         }
     }
 

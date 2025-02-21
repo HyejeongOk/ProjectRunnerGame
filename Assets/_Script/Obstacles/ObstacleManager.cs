@@ -37,14 +37,12 @@ public class ObstacleManager : MonoBehaviour
     // Coroutine 방식 : Function, Method, Subroutine
     IEnumerator Start()
     {
-        TrackManager[] tm = FindObjectsByType<TrackManager>(FindObjectsInactive.Include,FindObjectsSortMode.None);
-        if (tm == null || tm.Length <= 0)
+        trackMgr = FindFirstObjectByType<TrackManager>();
+        if (trackMgr == null)
         {
             Debug.LogError($"트랙 관리자 없음");
             yield break;   // return과 동일 : 함수 완전 탈출
         } 
-
-        trackMgr = tm[0];
 
         // Obstacles Pools에 있는 모든 값을 랜덤생성기에 등록
         foreach(var pool in obstaclePools)

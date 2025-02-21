@@ -28,6 +28,7 @@ public class TrackManager : MonoBehaviour
 
     private List<Track> trackList = new List<Track>();  // 생성한 트랙들 보관
     private Transform camTransform;
+    [SerializeField] IngameUI uiIngame;
 
     // 상태 정보
     [HideInInspector] public List<Transform> laneList;  // 현재 트랙의 라인 정보를 전달
@@ -40,6 +41,18 @@ public class TrackManager : MonoBehaviour
     {
         // 메인 카메라 Transform을 미리 받아온다. 
         camTransform = Camera.main.transform;
+
+        // 인게임 UI를미리 받아온다. 없으면 패스
+        uiIngame = FindFirstObjectByType<IngameUI>();
+
+        // 씬에 존재하는 모든 오브젝트를 가져와라
+        // IngameUI[] uis = FindObjectsByType<IngameUI>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        // 씬에 존재하는 오브젝트들 중 아무거나 하나만 가져와라
+        // IngameUI ui1 = FindAnyObjectByType<IngameUI>();
+
+        // 씬에 존재하는 오브젝트들 중 생성한 순서에서 첫번째를 가져와라
+        // IngameUI uifirst = FindFirstObjectByType<IngameUI>();
 
         SpawnInitialTrack();
         SpawnPlayer();
@@ -176,12 +189,15 @@ public class TrackManager : MonoBehaviour
 
     private IEnumerator CountdownTrack()
     {
+        yield return new WaitForSeconds(0.5f);
          // countdown으로 반복문 처리하기
         for(int i = countdown; i > 0; i-- )
         {
-            Debug.Log(i);
+            // Debug.Log(i);
+            uiIngame.ShowInfo($"{i}");
             yield return new WaitForSeconds(1f);
         }
+        uiIngame.ShowInfo("GO");
         GameManager.IsPlaying = true;
     }
     
