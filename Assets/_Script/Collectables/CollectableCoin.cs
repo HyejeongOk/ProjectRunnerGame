@@ -1,11 +1,12 @@
-using DG.Tweening;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class CollectableCoin : Collectable
 {
-   // public Transform pivot;
-
+   [SerializeField] Transform pivot;
+   [SerializeField] ParticleSystem particle;
    
 
     // 해당 코인 증가량
@@ -25,11 +26,27 @@ public class CollectableCoin : Collectable
     {
         GameManager.coins += Add;
 
-        transform.SetParent(null);
 
-        transform.DOScale(1.2f, 0.25f)
-            .OnComplete(() => transform.DOScale(0f, 0.2f)
-            .OnComplete(() => Destroy(gameObject)));
+        // transform.DOScale(1.2f, 0.25f)
+        //     .OnComplete(() => transform.DOScale(0f, 0.2f)
+        //     .OnComplete(() => Destroy(gameObject)));
+        // Destroy(gameObject);
+        
+        StartCoroutine(Disappear());
+    }
+
+    IEnumerator Disappear()
+    {
+        // 1 transform , 2 pivot , 3 particle => world 좌표로 분리
+        // 코인이 사라질 때, Track 종속이 아닌, World로 바꾼다
+        // (Local => World)
+        transform.SetParent(null);
+        
+        pivot.gameObject.SetActive(false);
+        particle.Play();
+
+        yield return new WaitUntil(() => particle.isPlaying == false);
+
         Destroy(gameObject);
     }
 }

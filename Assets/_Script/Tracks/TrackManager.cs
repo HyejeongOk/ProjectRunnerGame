@@ -15,7 +15,7 @@ public class TrackManager : MonoBehaviour
     // public float trackThreshold = 10f; //트랙 삭제 z축
 
     [Space(20)]
-    [SerializeField] Material CurvedMaterial;
+    [SerializeField] List<Material> CurvedMaterials;
     // public Vector2 CurvedValue;
 
     // 주기, 진폭
@@ -167,7 +167,11 @@ public class TrackManager : MonoBehaviour
        float rndY = Mathf.PerlinNoise1D(elapsedTime * CurvedFrequencyY) *2f - 1f;
        rndY = rndY * CurvedAmplitudeY;
        
-       CurvedMaterial.SetVector(_curveAmount, new Vector4(rndX, rndY, 0f, 0f));
+       foreach(var m in CurvedMaterials)
+       {
+            m.SetVector(_curveAmount, new Vector4(rndX, rndY, 0f, 0f));
+       }
+        
     }
 
     // z 값에 해당하는 트랙을 가져오기
