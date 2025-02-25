@@ -1,0 +1,100 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
+
+public class LaneGenerator
+{
+    private List<Lane> lanePatterns = new List<Lane>();
+
+    // 할당량 채우면 교체하라 ()
+    private int limitQuota = 10;
+    private int _currentQuota;
+
+    private int laneCount;
+    [HideInInspector] public Lane currentPattern;
+
+    // 생성자 (Construct) : 클래스 최초 호출
+    public LaneGenerator(int count, int quota) 
+    {
+        laneCount = count;
+        limitQuota = quota;
+
+        lanePatterns.Add(new LaneWaveStraight());
+        // lanePatterns.Add(new LaneWave());
+
+        currentPattern = lanePatterns[0];
+
+        // Factory
+    }
+
+ 
+
+    void OnDrawGizmos()
+    {
+        // Gizmos.color = Color.yellow;
+        // for (int i = 0; i<count; i++)
+        // {
+            // 시작 위치
+            //Gizmos.color = Color.green;
+            //Gizmos.DrawSphere(transform.position, 0.5f);
+
+            // 끝 위치
+            //Gizmos.color = Color.cyan;
+            //Gizmos.DrawCube(targetPos, Vector3.one * 1f);
+
+            //count 만큼 배치 =>반복문
+            // i++, 5 
+            // 0f : 시작, 0.2f, 0.4f, 0.6, 0.8 1f : 끝
+            // i / count => 0f, 1/5=>0.2, 2/5=>0.4, 3/5=>0.6... 5/5=1
+            // count = 1 -> 중심에 -> 0.5f
+
+            // float t = (float)i/(count-1);
+            // Vector3 v = Vector3.Lerp(transform.position, transform.position + transform.forward * offsetZ, t);
+            // // 3.14 => 180도 , 2PI = 360도
+            // // Sin => -1f ~ 1f => 음수를 양수로 전환
+            // float s = Mathf.Abs(Mathf.Sin(t * Mathf.PI * frequency)) * amplitude;
+            // v = new Vector3(v.x, v.y + s, v.z);
+            // Gizmos.DrawCube(v, Vector3.one * 0.5f);
+        // }
+    }
+
+    public int GetNextLane()
+    {
+        if(currentPattern == null)
+            return -1;
+        
+        _currentQuota++;
+
+        if(_currentQuota >= limitQuota)
+            SwitchPattern();
+
+        return currentPattern.GetNextLane();
+    }
+
+    public void SwitchPattern(int index = -1)
+    {
+        // -1 의미? 랜덤으로 발생
+        // 0,1 의미? 0,1의 패턴을 정확하게 지명
+        var i = index == -1 ? Random.Range(0, lanePatterns.Count) : Mathf.Clamp(index, 0, lanePatterns.Count-1);
+
+        // if( index == -1 )
+        // {
+        //     index = Random.Range(0, lanePatterns.Count);
+       
+        // }
+
+        // else
+        // {
+        //     //1. 범위를 벗어나면, 나가라
+        //     //2. 범위 안으로 제한하라 => Clamp
+
+        //     index = Mathf.Clamp(index, 0, lanePatterns.Count-1);
+        // }
+
+            Lane lanePattern = lanePatterns[i];
+            currentPattern = lanePattern;
+            currentPattern.Initialize(laneCount);
+
+            _currentQuota = 0;
+    }
+}

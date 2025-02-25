@@ -30,6 +30,8 @@ public class TrackManager : MonoBehaviour
     private Transform camTransform;
     [SerializeField] IngameUI uiIngame;
 
+
+    // 3Lane => 0:Left, 1:Middle, 2:Right
     // 상태 정보
     [HideInInspector] public List<Transform> laneList;  // 현재 트랙의 라인 정보를 전달
 

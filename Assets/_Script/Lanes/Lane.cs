@@ -1,0 +1,15 @@
+
+// abstract와 유사하지만, 가벼운 버전
+// abstract 변수 선언 (가능)
+// interface 변수선언 (불가능)
+// interface는 생성자 (Construct) (불가능)
+public interface Lane 
+{
+    public string Name { get; }
+    
+    // 초기화 함수
+    public void Initialize(int maxlane);
+
+    // Lane 정보를 가져오는 함수
+    public int GetNextLane();
+}

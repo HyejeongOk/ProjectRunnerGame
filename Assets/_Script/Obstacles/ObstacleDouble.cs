@@ -4,6 +4,8 @@ using UnityEngine;
 
 // 싱글의 파생형
 // TYPE ( 2Blocks, Composited )
+// Concrete 클래스
+// Abstract -> Concrete
 public class ObstacleDouble : Obstacle
 {
     // public : 전체 공개
