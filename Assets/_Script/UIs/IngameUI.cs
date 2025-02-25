@@ -2,17 +2,18 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using CustomInspector;
-
+using MoreMountains.Feedbacks;
 
 public class IngameUI : MonoBehaviour
 {
     [HorizontalLine]
     [SerializeField] TextMeshProUGUI tmInfomation;
+    [SerializeField] MMF_Player feedbackinformation;
 
     [HorizontalLine]
     [SerializeField] TextMeshProUGUI tmMileage;
     [SerializeField] TextMeshProUGUI tmCoin;
-    [SerializeField] TextMeshProUGUI tmHealth;
+    [SerializeField] TextMeshProUGUI tmLife;
 
     void Awake()
     {
@@ -20,29 +21,48 @@ public class IngameUI : MonoBehaviour
 
     }
 
+    // void Start()
+    // {
+    //     ShowInfo("TEST", 5f);
+    // }
+
     void Update()
     {
         UpdateCoins();
         UpdateMileage();
+        UpdateLife();
     }
 
-    Sequence _seqInfo;
+    //Sequence _seqInfo;
+    Tween _tweenShowInfo;
     public void ShowInfo(string info, float duration = 1f)
     {
-        tmInfomation.transform.localScale = Vector3.zero;
+        if (feedbackinformation.IsPlaying)
+            feedbackinformation.StopFeedbacks();
 
-        if(_seqInfo != null)
-            _seqInfo.Kill(true);
+        // 5초 확보 필요
+        // 표시 중에 새로운 콜 =>
+        // 1. 기존 작업마무리하고 처리한다 => 스택 쌓아두고 처리
+        // 2. 기존 작업 취소하고 새로 바로 처리한다. => 즉시 업데이트 처리
+        tmInfomation.text = info;
+        feedbackinformation.GetFeedbackOfType<MMF_Pause>().PauseDuration = duration;
+        feedbackinformation.PlayFeedbacks();
 
-        // 숫자 시작할 때 크기 120% -> 100% -> 0%
-        // 모든 연출은 duration 동안 완료되도록
-        // duration 전체 길이 => 연출이 duration 안에 종료되도록
-        _seqInfo = DOTween.Sequence();
-        _seqInfo.AppendCallback(() => tmInfomation.text = info);
-        _seqInfo.Append(tmInfomation.transform.DOScale(1.2f, duration * 0.1f));
-        _seqInfo.Append(tmInfomation.transform.DOScale(1f, duration * 0.4f));
-        _seqInfo.AppendInterval(duration*0.2f);
-        _seqInfo.Append(tmInfomation.transform.DOScale(0f, duration * 0.1f));
+
+
+        // tmInfomation.transform.localScale = Vector3.zero;
+        // if(_seqInfo != null)
+        //     _seqInfo.Kill(true);
+
+        // // 숫자 시작할 때 크기 120% -> 100% -> 0%
+        // // 모든 연출은 duration 동안 완료되도록
+        // // duration 전체 길이 => 연출이 duration 안에 종료되도록
+        // _seqInfo = DOTween.Sequence();
+        // _seqInfo.AppendCallback(() => tmInfomation.text = info);
+        // _seqInfo.Append(tmInfomation.transform.DOScale(1.2f, duration * 0.1f));
+        // _seqInfo.Append(tmInfomation.transform.DOScale(1f, duration * 0.4f));
+        // _seqInfo.AppendInterval(duration*0.2f);
+        // _seqInfo.Append(tmInfomation.transform.DOScale(0f, duration * 0.1f));
 
     }
 
@@ -96,6 +116,22 @@ public class IngameUI : MonoBehaviour
                         .OnComplete(() => tmCoin.rectTransform.localScale = Vector3.one);
     }
     
+    private int lastLife;
+    void UpdateLife()
+    {
+        if(lastLife == GameManager.life) 
+            return;
+        
+        tmLife.text = GameManager.life.ToString();
+
+        if(GameManager.life <= 0)
+        {
+            ShowInfo("GAME OVER", 5f);
+            GameManager.IsGameOver = true;
+        }
+
+        lastLife = GameManager.life;
+    }
 
     // Utility : 정수부분 + 실수부분을 나눠서 string으로 전달
     // 예 123.456f => 123 + 456 => string 결합

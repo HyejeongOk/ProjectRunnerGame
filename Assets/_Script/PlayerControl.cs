@@ -2,15 +2,12 @@ using Unity.Mathematics;
 using UnityEngine;
 using DG.Tweening;
 using Deform;
-using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 
 public enum PlayerState {Idle = 0, Move, Jump, Slide};
 
 public class PlayerControl : MonoBehaviour
 {
-    [Space(20)]
-    [SerializeField] Material material;
-
     [Space(20)]
     // 속성 : 인스펙터 노출
     [SerializeField] Transform pivot;
@@ -33,11 +30,15 @@ public class PlayerControl : MonoBehaviour
     [Space(20)]
     [SerializeField] float slideDuration = 0.5f;  // 슬라이드 지속 시간
 
+    [Space(20)]
+    [SerializeField] MMF_Player feedbackimpact;  // 아이템 획득 시 연출
+    [SerializeField] MMF_Player feedbackCrash;  // 장애물 충돌 시 연출
+
 
     // 다른 클래스에 공개는 하지만 인스펙터 노출 안함
     [HideInInspector] public TrackManager trackMgr;
 
-    public PlayerState state;
+    [SerializeField] PlayerState state;
 
 
     // 내부 사용 : 인스펙터 노출 안함
@@ -62,7 +63,7 @@ public class PlayerControl : MonoBehaviour
     {
         // [CHEAT]
         // 1 키 토글, 처음 => 멈춤, 다시 => 재개
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (GameManager.IsGameOver == false && Input.GetKeyDown(KeyCode.Alpha1))
             GameManager.IsPlaying = !GameManager.IsPlaying;
 
         if (pivot == null || GameManager.IsPlaying == false)
@@ -85,16 +86,15 @@ public class PlayerControl : MonoBehaviour
     {
         if(other.tag == "Collectable")
         {
-            DOVirtual.Float(0f,1f, 0.1f,v => material.SetFloat("_Impact", v))
-                    .OnComplete(()=>DOVirtual.Float(1f,0f, 0.1f,v => material.SetFloat("_Impact", v))
-                    .OnComplete(()=>material.SetFloat("_Impact", 0f)));
+            feedbackimpact?.PlayFeedbacks();
             other.GetComponentInParent<Collectable>()?.Collect();            
         }
 
         else if (other.tag == "Obstacle")
         {
+            feedbackCrash?.PlayFeedbacks();
+            GameManager.life -= 1;
             GameManager.IsPlaying = false;   
-
         }
     }
 

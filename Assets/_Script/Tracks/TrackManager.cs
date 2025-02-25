@@ -198,10 +198,10 @@ public class TrackManager : MonoBehaviour
         for(int i = countdown; i > 0; i-- )
         {
             // Debug.Log(i);
-            uiIngame.ShowInfo($"{i}");
+            uiIngame.ShowInfo($"{i}", 1.5f);
             yield return new WaitForSeconds(1f);
         }
-        uiIngame.ShowInfo("GO");
+        uiIngame.ShowInfo("GO", 2f);
         GameManager.IsPlaying = true;
     }
     
