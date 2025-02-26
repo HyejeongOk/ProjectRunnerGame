@@ -11,5 +11,5 @@ public interface Lane
     public void Initialize(int maxlane);
 
     // Lane 정보를 가져오는 함수
-    public int GetNextLane();
+    public LaneData GetNextLane();
 }

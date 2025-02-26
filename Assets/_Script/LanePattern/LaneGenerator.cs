@@ -1,28 +1,29 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class LaneGenerator
 {
     private List<Lane> lanePatterns = new List<Lane>();
 
     // 할당량 채우면 교체하라 ()
-    private int limitQuota = 10;
+    private Vector2 limitQuota;
     private int _currentQuota;
 
     private int laneCount;
     [HideInInspector] public Lane currentPattern;
 
     // 생성자 (Construct) : 클래스 최초 호출
-    public LaneGenerator(int count, int quota) 
+    public LaneGenerator(int count, Vector2 quota) 
     {
         laneCount = count;
         limitQuota = quota;
 
         lanePatterns.Add(new LaneWaveStraight());
-        // lanePatterns.Add(new LaneWave());
+        lanePatterns.Add(new LaneWave());
+        lanePatterns.Add(new LaneZigzag());
 
-        currentPattern = lanePatterns[0];
+        SwitchPattern();
 
         // Factory
     }
@@ -58,14 +59,11 @@ public class LaneGenerator
         // }
     }
 
-    public int GetNextLane()
-    {
-        if(currentPattern == null)
-            return -1;
-        
+    public LaneData GetNextLane()
+    {  
         _currentQuota++;
 
-        if(_currentQuota >= limitQuota)
+        if(_currentQuota >= Random.Range((int)limitQuota.x, limitQuota.y))
             SwitchPattern();
 
         return currentPattern.GetNextLane();

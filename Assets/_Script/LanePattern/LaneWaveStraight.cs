@@ -1,3 +1,5 @@
+
+
 public class LaneWaveStraight : Lane
 {
     public string Name => "StraightPattern";
@@ -6,17 +8,20 @@ public class LaneWaveStraight : Lane
     // // 데이터 보관용
     // public int _maxLane; 
     
-    private int currentLane;
+    private LaneData data;
 
     public void Initialize(int maxlane)
     {
-        currentLane = UnityEngine.Random.Range(0,maxlane);
+        data.maxlane = maxlane;
+        
+        System.Random random = new System.Random();
+        data.currentLane = random.Next(0, maxlane);
     }
 
-    public int GetNextLane()
+    public LaneData GetNextLane()
     {
         // count 만큼 나란히 배치
-        return currentLane;
+        return data;
     }
 
 

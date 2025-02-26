@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using CustomInspector;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -24,8 +23,9 @@ public class CollectableManager : MonoBehaviour
 
     [Space(20)]
     [SerializeField] float spawnZpos = 60f;
-    [SerializeField, AsRange(0, 100)] Vector2 spawnInterval;
-    [SerializeField] int spawnQuota; // 한 패턴에서 최대 찍을 개수
+    [SerializeField, AsRange(0, 100)] Vector2 spawnInterval; // 개별 스폰 간격
+    
+    [SerializeField, AsRange(0, 30)] Vector2 spawnQuota; // 한 패턴에서 최대 찍을 개수
 
     private TrackManager trackMgr;
     private RandomGenerator randomGenerator = new RandomGenerator();
@@ -42,7 +42,7 @@ public class CollectableManager : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        laneGenerator = new LaneGenerator(trackMgr.laneList.Count,spawnQuota);
+        laneGenerator = new LaneGenerator(trackMgr.laneList.Count, spawnQuota);
 
         // collectable Pools에 있는 모든 값을 랜덤생성기에 등록
         foreach(var pool in collectablepools)
@@ -56,10 +56,9 @@ public class CollectableManager : MonoBehaviour
 
     }
 
-    //장애물 생성 (lane = 0, 1, 2)
     public void SpawnCollectable()
    {
-        (int lane, Collectable prefab) = RandomLanePrefab();
+        (LaneData lane, Collectable prefab) = RandomLanePrefab();
 
         // Z 위치
         // 현재 해당 트랙의 자식으로 넣는다
@@ -74,7 +73,7 @@ public class CollectableManager : MonoBehaviour
         if(prefab != null)
         {
             Collectable o = Instantiate(prefab, t.CollectableRoot);
-            o.SetLanePosition(lane, spawnZpos, trackMgr);
+            o.SetLanePosition(lane.currentLane, lane.currentY, spawnZpos, trackMgr);
         }
    }
 
@@ -99,16 +98,16 @@ public class CollectableManager : MonoBehaviour
    } 
 
     // TEMPCODE
-   (int, Collectable) RandomLanePrefab()
+   (LaneData, Collectable) RandomLanePrefab()
    {
         // 랜덤1 : Lane을 랜덤 생성
         // int rndLane = Random.Range(0, trackMgr.laneList.Count);
 
-        int lane = laneGenerator.GetNextLane();
+        LaneData lane = laneGenerator.GetNextLane();
         Collectable prefab = randomGenerator.GetRandom().GetItem() as Collectable;
 
         if(prefab == null) 
-            return (-1, null);
+            return (lane, null);
 
         return (lane, prefab);
    }

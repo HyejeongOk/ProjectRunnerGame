@@ -1,0 +1,19 @@
+using UnityEngine;
+
+// Class > Struct
+// Class : 데이터, 기능, 구조 (종합적인)
+// Struct : 데이터 특화 (특화된)
+// Heap(작업자) vs Stack (컴파일러)
+
+public struct LaneData
+{
+    // 최대 레인 (수)
+    public int maxlane;  
+
+    // 결정한 현재 레인 (인덱스)
+    public int currentLane;
+    // 결정한 현재 Y 위치
+    public float currentY;
+    
+    // Z 위치는 각 매니저들이 결정( ObstacleManager, CollectableManager 등)
+}
