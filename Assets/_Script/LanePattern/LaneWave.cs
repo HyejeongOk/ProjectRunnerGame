@@ -20,15 +20,17 @@ public class LaneWave : Lane
     public void Initialize(int maxlane)
     {
         data.maxlane = maxlane;
-        
+
         System.Random random = new System.Random();
         data.currentLane = UnityEngine.Random.Range(0, maxlane);
+
+        elapsed = 0f;
     }
 
     public LaneData GetNextLane()
     {
-        elapsed += 0.1f;
         data.currentY = Mathf.Abs(Mathf.Sin(elapsed * Mathf.PI * frequency)) * amplitude;
+        elapsed += 0.1f;
 
         return data;
     }
