@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
 public abstract class RandomItem
 {
     public string name;
     public int weight;
 
-    public abstract Object GetItem();
+    public abstract object GetItem();
 }
 
 public class RandomGenerator

@@ -16,4 +16,11 @@ public struct LaneData
     public float currentY;
     
     // Z 위치는 각 매니저들이 결정( ObstacleManager, CollectableManager 등)
+
+    public LaneData(int current = -1)
+    {
+        maxlane = -1;
+        currentLane = current;
+        currentY = 0f;
+    }
 }

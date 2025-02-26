@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CustomInspector;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 // Serializable : 인스펙터 노출을 위한 내부 작업들은 한다
@@ -10,16 +11,33 @@ public class CollectablePool : RandomItem
 {
     public Collectable collectable;
 
-    public override Object GetItem()
+    public override object GetItem()
     {
         return collectable;
     }
+
+    // object > Object
+
 }
+
+[System.Serializable]
+public class LanepatternPool : RandomItem
+{
+    public string patternName;
+    public override object GetItem()
+    {
+        return patternName;
+    }
+} 
 
 public class CollectableManager : MonoBehaviour
 {
     [Space(20)]
     public List<CollectablePool> collectablepools;
+    private RandomGenerator collectableGenerator = new RandomGenerator();
+
+    public List<LanepatternPool> lanepatternPools;
+    private LaneGenerator laneGenerator;
 
     [Space(20)]
     [SerializeField] float spawnZpos = 60f;
@@ -28,8 +46,6 @@ public class CollectableManager : MonoBehaviour
     [SerializeField, AsRange(0, 30)] Vector2 spawnQuota; // 한 패턴에서 최대 찍을 개수
 
     private TrackManager trackMgr;
-    private RandomGenerator randomGenerator = new RandomGenerator();
-    private LaneGenerator laneGenerator;
 
     IEnumerator Start()
     {
@@ -42,11 +58,12 @@ public class CollectableManager : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        laneGenerator = new LaneGenerator(trackMgr.laneList.Count, spawnQuota);
-
-        // collectable Pools에 있는 모든 값을 랜덤생성기에 등록
+        // 아이템들 프리팹과 랜덤비중 등록
         foreach(var pool in collectablepools)
-            randomGenerator.AddItem(pool);
+            collectableGenerator.AddItem(pool);
+
+        // 레인의 패턴과 랜덤비중 등록
+       laneGenerator = new LaneGenerator(trackMgr.laneList.Count, spawnQuota, lanepatternPools);
 
         // yield return new WaitForEndOfFrame();  //  지연 : 1프라임만 지연
         // yield return new WaitForSeconds(2f); // 지연 : 2초 지연
@@ -58,7 +75,7 @@ public class CollectableManager : MonoBehaviour
 
     public void SpawnCollectable()
    {
-        (LaneData lane, Collectable prefab) = RandomLanePrefab();
+        (LaneData lanedata, Collectable prefab) = RandomLanePrefab();
 
         // Z 위치
         // 현재 해당 트랙의 자식으로 넣는다
@@ -70,16 +87,16 @@ public class CollectableManager : MonoBehaviour
             return;
         }
 
-        if(prefab != null)
+        if(prefab != null && lanedata.currentLane != -1)
         {
             Collectable o = Instantiate(prefab, t.CollectableRoot);
-            o.SetLanePosition(lane.currentLane, lane.currentY, spawnZpos, trackMgr);
+            o.SetLanePosition(lanedata.currentLane, lanedata.currentY, spawnZpos, trackMgr);
         }
    }
 
    IEnumerator InfiniteSpawn()
    {
-        double lastMileage = 0;
+        double lastMileage = 0f;
         while(true)
         {   
             yield return new WaitUntil( () => GameManager.IsPlaying);
@@ -104,7 +121,7 @@ public class CollectableManager : MonoBehaviour
         // int rndLane = Random.Range(0, trackMgr.laneList.Count);
 
         LaneData lane = laneGenerator.GetNextLane();
-        Collectable prefab = randomGenerator.GetRandom().GetItem() as Collectable;
+        Collectable prefab = collectableGenerator.GetRandom().GetItem() as Collectable;
 
         if(prefab == null) 
             return (lane, null);

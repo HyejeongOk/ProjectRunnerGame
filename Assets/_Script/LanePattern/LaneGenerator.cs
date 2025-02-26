@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class LaneGenerator
 {
     private List<Lane> lanePatterns = new List<Lane>();
+    private RandomGenerator randomGenerator = new RandomGenerator();
 
     // 할당량 채우면 교체하라 ()
     private Vector2 limitQuota;
@@ -14,14 +14,18 @@ public class LaneGenerator
     [HideInInspector] public Lane currentPattern;
 
     // 생성자 (Construct) : 클래스 최초 호출
-    public LaneGenerator(int count, Vector2 quota) 
+    public LaneGenerator(int lanecount, Vector2 quota, List<LanepatternPool> pools) 
     {
-        laneCount = count;
+        laneCount = lanecount;
         limitQuota = quota;
 
         lanePatterns.Add(new LaneWaveStraight());
         lanePatterns.Add(new LaneWave());
         lanePatterns.Add(new LaneZigzag());
+
+        
+        foreach( var p in pools)
+            randomGenerator.AddItem(p);
 
         SwitchPattern();
 
@@ -66,14 +70,19 @@ public class LaneGenerator
         if(_currentQuota >= Random.Range((int)limitQuota.x, limitQuota.y))
             SwitchPattern();
 
+        if (currentPattern == null)
+            return new LaneData(-1);
+
         return currentPattern.GetNextLane();
     }
 
     public void SwitchPattern(int index = -1)
     {
+        string patternName = randomGenerator.GetRandom().GetItem() as string;
+
         // -1 의미? 랜덤으로 발생
         // 0,1 의미? 0,1의 패턴을 정확하게 지명
-        var i = index == -1 ? Random.Range(0, lanePatterns.Count) : Mathf.Clamp(index, 0, lanePatterns.Count-1);
+        //var i = index == -1 ? Random.Range(0, lanePatterns.Count) : Mathf.Clamp(index, 0, lanePatterns.Count-1);
 
         // if( index == -1 )
         // {
@@ -89,10 +98,10 @@ public class LaneGenerator
         //     index = Mathf.Clamp(index, 0, lanePatterns.Count-1);
         // }
 
-            Lane lanePattern = lanePatterns[i];
+            Lane lanePattern = lanePatterns.Find(f => f.Name == patternName);
             currentPattern = lanePattern;
-            currentPattern.Initialize(laneCount);
-
+            currentPattern?.Initialize(laneCount);
+           
             _currentQuota = 0;
     }
 }

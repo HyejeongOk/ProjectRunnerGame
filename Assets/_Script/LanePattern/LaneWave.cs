@@ -9,7 +9,7 @@ public class LaneWave : Lane
     public float amplitude = 2.5f;  // 진폭 (Amplitude)
     public float frequency = 1f;  // 주기 (Frequency)
 
-    private float elapsed;
+    private float elapsed = 0f;
    
     // // 외부 노출용
     // public int MaxLane {get {return _maxLane ; } set {_maxLane = value;} }  
@@ -19,6 +19,8 @@ public class LaneWave : Lane
     
     public void Initialize(int maxlane)
     {
+        data.maxlane = maxlane;
+        
         System.Random random = new System.Random();
         data.currentLane = UnityEngine.Random.Range(0, maxlane);
     }
