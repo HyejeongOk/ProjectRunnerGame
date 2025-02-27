@@ -94,7 +94,8 @@ public class PlayerControl : MonoBehaviour
         {
             feedbackCrash?.PlayFeedbacks();
             GameManager.life -= 1;
-            GameManager.IsPlaying = false;   
+            GameManager.IsPlaying = false;
+
         }
     }
 
