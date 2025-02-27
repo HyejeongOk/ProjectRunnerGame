@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CustomInspector;
+using DG.Tweening;
 
 [System.Serializable]
 public class ObstaclePool : RandomItem
 {
     public List<Obstacle> obstacleList;
+    [SerializeField, AsRange(0, 100)] Vector2 obstacleInterval;
 
     public override object GetItem()
     {
@@ -132,5 +134,11 @@ public class ObstacleManager : MonoBehaviour
             return (-1, null);
 
         return (rndLane, prefab);
+   }
+
+   public void SetPhase(Phase phase, float duration = 1f)
+   {
+        // 장애물 interval적용 
+        DOVirtual.Vector2(spawnInterval, phase.obstacleInterval, duration, i => spawnInterval = i).SetEase(Ease.InOutSine);
    }
 }

@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.VisualScripting;
+using DG.Tweening;
 
 public class TrackManager : MonoBehaviour
 {
     [Space(20)]
     [SerializeField] Track trackPrefabs;
     [SerializeField] PlayerControl playerPrefab;
+    [SerializeField] GameObject trackStart, trackFinish;
 
     [Space(20)]
     [Range(0f, 50f)] public float scrollspeed = 10f;
@@ -57,6 +60,7 @@ public class TrackManager : MonoBehaviour
         // IngameUI uifirst = FindFirstObjectByType<IngameUI>();
 
         SpawnInitialTrack();
+        SpawnStartZone();
         SpawnPlayer();
 
        StartCoroutine(CountdownTrack());
@@ -65,9 +69,11 @@ public class TrackManager : MonoBehaviour
     
     void Update()
     {
-        if(GameManager.IsPlaying == false) return;
+        if(GameManager.IsPlaying == false) 
+            return;
 
        RepositionTrack();
+       SpawnFinishZone();
 
        //float sin = Mathf.Sin(Time.time);
 
@@ -154,7 +160,7 @@ public class TrackManager : MonoBehaviour
     float elapsedTime;
     void BendTrack()
     {
-        if (scrollspeed <= 0f) return;
+        // if (scrollspeed <= 0f) return;
 
         // 0f ~ 1f => -1f ~ 1f
 
@@ -188,6 +194,12 @@ public class TrackManager : MonoBehaviour
         return null;
     }
 
+    public void SetPhase(Phase phase, float duration = 0.5f)
+    {
+
+        DOVirtual.Float(scrollspeed, phase.scrollSpeed, duration, s => scrollspeed = s).SetEase(Ease.InOutSine);
+    }
+
     public void StopScrollTrack()
     {
         scrollspeed = 0f;
@@ -203,7 +215,6 @@ public class TrackManager : MonoBehaviour
             uiIngame.ShowInfo($"{i}", 1.5f);
             yield return new WaitForSeconds(1f);
         }
-        uiIngame.ShowInfo("GO", 2f);
         GameManager.IsPlaying = true;
     }
     
@@ -211,5 +222,31 @@ public class TrackManager : MonoBehaviour
     {
         PlayerControl player = Instantiate(playerPrefab, new Vector3(-0.21f, 0f, 0f), Quaternion.identity);
         player.trackMgr = this;
+    }
+
+    void SpawnStartZone(float zpos = 3f)
+    {
+        // 3m 앞에 트랙이 있는지 판단
+        Track t = GetTrackByZ(zpos);
+        GameObject o = Instantiate(trackStart, t.ObstacleRoot);
+        Vector3 pos = new Vector3(0f, 0f, zpos);
+        o.transform.SetPositionAndRotation(pos, Quaternion.identity);
+    }
+
+    GameObject _finishzone;
+
+    void SpawnFinishZone(float zpos = 60f)
+    {
+        if(_finishzone != null)
+            return;
+
+        if (GameManager.mileage + zpos < GameManager.mileageFinish)
+            return;
+
+        // 60m 앞에 트랙이 있는지 판단
+        Track t = GetTrackByZ(zpos);
+        _finishzone = Instantiate(trackFinish, t.ObstacleRoot);
+        Vector3 pos = new Vector3(0f, 0f, zpos);
+        _finishzone.transform.SetPositionAndRotation(pos, Quaternion.identity);
     }
 }
