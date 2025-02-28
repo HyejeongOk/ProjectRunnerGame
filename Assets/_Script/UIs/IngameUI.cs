@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using CustomInspector;
 using MoreMountains.Feedbacks;
+using System.Collections.Generic;
 
 public class IngameUI : MonoBehaviour
 {
@@ -11,7 +13,11 @@ public class IngameUI : MonoBehaviour
     [SerializeField] MMF_Player feedbackinformation;
 
     [HorizontalLine]
-    [SerializeField] TextMeshProUGUI tmMileage;
+    [SerializeField] TextMeshProUGUI mileageText;
+    [SerializeField] Slider mileageSlider;
+    [SerializeField] SliderUI mileageSliderui;
+
+    [HorizontalLine]
     [SerializeField] TextMeshProUGUI tmCoin;
     [SerializeField] TextMeshProUGUI tmLife;
 
@@ -31,6 +37,17 @@ public class IngameUI : MonoBehaviour
         UpdateCoins();
         UpdateMileage();
         UpdateLife();
+    }
+
+    public void SetMileage(List<Phase> phases)
+    {
+        foreach( var p in phases)
+        mileageSliderui.AddIcon(p.Icon, (float)p.Mileage / GameManager.mileageFinish);
+    }
+
+    public void SetPhase(Phase phase)
+    {
+        ShowInfo(phase.Name);
     }
 
     //Sequence _seqInfo;
@@ -74,7 +91,7 @@ public class IngameUI : MonoBehaviour
         {
             long intpart = (long)GameManager.mileage;
             double decpart = (int)((GameManager.mileage - intpart)*10);
-            tmMileage.text = $"{intpart}<size=80%>.{decpart}</size><size=60%>m</size>";
+            mileageText.text = $"{intpart}<size=80%>.{decpart}</size><size=60%>m</size>";
         }
 
         // 큰 수 표현
@@ -83,8 +100,10 @@ public class IngameUI : MonoBehaviour
             // 정수, 소수점
             ((long)GameManager.mileage).ToStringKilo(out string intpart, out string decpart, out string  unitpart);
             
-            tmMileage.text = $"{intpart}<size=80%>{decpart}{unitpart}</size><size=60%>m</size>";
+            mileageText.text = $"{intpart}<size=80%>{decpart}{unitpart}</size><size=60%>m</size>";
         }
+
+        mileageSlider.value = (float)(GameManager.mileage / GameManager.mileageFinish);
 
     }
     // 코인 획득 시, 

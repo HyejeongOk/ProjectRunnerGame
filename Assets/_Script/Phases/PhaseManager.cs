@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+
 public class PhaseManager : MonoBehaviour
 {
     [HorizontalLine("기본속성"), HideField] public bool _l0;
@@ -24,8 +25,9 @@ public class PhaseManager : MonoBehaviour
 
         uiIngame = FindFirstObjectByType<IngameUI>();
 
-
         GetFinishline();
+
+        uiIngame.SetMileage(mileageList);
 
         yield return new WaitUntil( ()=> GameManager.IsPlaying );
         StartCoroutine(IntervalUpdate());
@@ -70,10 +72,9 @@ public class PhaseManager : MonoBehaviour
 
     void SetPhase(Phase phase)
     {
-        uiIngame?.ShowInfo(phase.Name);
+        uiIngame?.SetPhase(phase);
         trackMgr?.SetPhase(phase);
         obstacleMgr?.SetPhase(phase);
-
     }
 
     void GameClear(Phase phase)

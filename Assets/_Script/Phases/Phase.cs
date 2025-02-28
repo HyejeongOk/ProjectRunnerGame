@@ -1,10 +1,12 @@
 using CustomInspector;
 using UnityEngine;
 
+
 [System.Serializable]
 public struct Phase
 {
     public string Name;
+    public Sprite Icon;
     public uint Mileage;
 
     [Space(5)]
