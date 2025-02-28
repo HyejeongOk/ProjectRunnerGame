@@ -10,8 +10,8 @@ public class PhaseManager : MonoBehaviour
     [HorizontalLine("기본속성"), HideField] public bool _l0;
     [SerializeField] float updateInterval = 1f;
 
-    [HorizontalLine("Phase 속성"), HideField] public bool _l1;
-    [SerializeField] List<Phase> mileageList = new List<Phase>();
+    [HorizontalLine("Phase Data 속성"), HideField] public bool _l1;
+    [SerializeField, Foldout] List<PhaseSO> mileageList = new List<PhaseSO>();
 
     private TrackManager trackMgr;
     private ObstacleManager obstacleMgr;
@@ -42,7 +42,7 @@ public class PhaseManager : MonoBehaviour
 
         while(true)
         {
-            Phase phase = mileageList[i];
+            PhaseSO phase = mileageList[i];
             // 특정 마일리지 마다 호출 ( 이벤트 시스템 )
             if(GameManager.mileage >= phase.Mileage)
             {
@@ -63,21 +63,21 @@ public class PhaseManager : MonoBehaviour
 
    void GetFinishline()
     {
-        Phase phaseEnd = mileageList.LastOrDefault();       
+        PhaseSO phaseEnd = mileageList.LastOrDefault();       
 
         GameManager.mileageFinish = phaseEnd.Mileage;
     }
 
 
 
-    void SetPhase(Phase phase)
+    void SetPhase(PhaseSO phase)
     {
         uiIngame?.SetPhase(phase);
         trackMgr?.SetPhase(phase);
         obstacleMgr?.SetPhase(phase);
     }
 
-    void GameClear(Phase phase)
+    void GameClear(PhaseSO phase)
     {
         SetPhase(phase);
 

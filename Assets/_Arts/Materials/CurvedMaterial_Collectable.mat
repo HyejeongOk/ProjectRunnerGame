@@ -141,7 +141,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Base_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _CurveAmount: {r: 0.63462055, g: 0.6519802, b: 0, a: 0}
+    - _CurveAmount: {r: -0.2833928, g: 0.14048888, b: 0, a: 0}
     - _EmissionColor: {r: 8, g: 5.0509806, b: 0, a: 1}
     - _ImpactColor: {r: 0.7169812, g: 0.6629291, b: 0.38892847, a: 1}
     - _Offset: {r: -0, g: -0, b: 0, a: 0}

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using CustomInspector;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,8 +46,11 @@ public class SliderUI : MonoBehaviour
     }
 
     int _imagenum = 0;
-    public void AddIcon(Sprite sprite, float v)
+    public void AddIcon(Sprite s, float v)
     {
+        if(s == null)
+            return;
+
         var image = imagepools[_imagenum++ % imagepools.Count];
         //imagepools.Find((i) => i.gameObject.activeSelf == false);
 
@@ -60,7 +61,7 @@ public class SliderUI : MonoBehaviour
         }
 
         image.gameObject.SetActive(true);
-        image.sprite = sprite;
+        image.sprite = s;
 
         icons.Add(new Icon(image, v));
 

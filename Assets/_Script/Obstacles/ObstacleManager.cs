@@ -8,10 +8,12 @@ using DG.Tweening;
 public class ObstaclePool : RandomItem
 {
     public List<Obstacle> obstacleList;
-    [SerializeField, AsRange(0, 100)] Vector2 obstacleInterval;
 
     public override object GetItem()
     {
+        if(obstacleList == null || obstacleList.Count <= 0)
+            return null;
+
         return obstacleList[Random.Range(0, obstacleList.Count)];
     }
 }
@@ -19,17 +21,16 @@ public class ObstaclePool : RandomItem
 public class ObstacleManager : MonoBehaviour
 {
     [Space(20)]
-    public List<ObstaclePool> obstaclePools;
+    //public List<ObstaclePool> obstaclePools;
 
     // [Space(20)]
     // [SerializeField] List<Obstacle> obstacleSingle;
     // [SerializeField] List<Obstacle> obstacleDouble;
     // [SerializeField] List<Obstacle> obstacleTriple;
-
-    [Space(20)]
     [SerializeField] float spawnZpos = 60f;
-    [SerializeField, AsRange(0, 100)] Vector2 spawnInterval;
+    [SerializeField, ReadOnly] Vector2 spawnInterval;
 
+    [ReadOnly] ObstacleSO data;
     private TrackManager trackMgr;
     private RandomGenerator randomGenerator = new RandomGenerator();
 
@@ -43,9 +44,7 @@ public class ObstacleManager : MonoBehaviour
             yield break;   // return과 동일 : 함수 완전 탈출
         } 
 
-        // Obstacles Pools에 있는 모든 값을 랜덤생성기에 등록
-        foreach(var pool in obstaclePools)
-            randomGenerator.AddItem(pool);
+        
 
         // yield return new WaitForEndOfFrame();  //  지연 : 1프라임만 지연
         // yield return new WaitForSeconds(2f); // 지연 : 2초 지연
@@ -60,6 +59,9 @@ public class ObstacleManager : MonoBehaviour
     //장애물 생성 (lane = 0, 1, 2)
     public void SpawnObstacle()
    {
+        if( data == null)
+            return;
+
         (int lane, Obstacle prefab) = RandomLanePrefab();
 
         // Z 위치
@@ -136,9 +138,30 @@ public class ObstacleManager : MonoBehaviour
         return (rndLane, prefab);
    }
 
-   public void SetPhase(Phase phase, float duration = 1f)
+   public void SetPhase(PhaseSO phase, float duration = 1f)
    {
+        if(phase.obstacleData == null)
+        {
+            ClearObstacles();
+            return; 
+        }
+
+        data = phase.obstacleData;
+
+        // 랜덤 초기화
+        randomGenerator.Clear();
+
+        // Obstacles Pools에 있는 모든 값을 랜덤생성기에 등록
+        foreach(var pool in data.pools)
+            randomGenerator.AddItem(pool);
+
         // 장애물 interval적용 
-        DOVirtual.Vector2(spawnInterval, phase.obstacleInterval, duration, i => spawnInterval = i).SetEase(Ease.InOutSine);
+        DOVirtual.Vector2(spawnInterval, data.interval, duration, i => spawnInterval = i).SetEase(Ease.InOutSine);
+   }
+
+   public void ClearObstacles()
+   {
+        randomGenerator.Clear();
+        data = null;
    }
 }

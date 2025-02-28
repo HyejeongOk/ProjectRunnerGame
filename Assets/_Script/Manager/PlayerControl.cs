@@ -28,7 +28,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float[] jumpIntervals = { 0.25f, 0.5f, 0.75f, 0.25f }; // 점프 시퀀스 타이밍 조절
 
     [Space(20)]
-    [SerializeField] float slideDuration = 0.5f;  // 슬라이드 지속 시간
+    [SerializeField] float slideDuration = 0.3f;  // 슬라이드 지속 시간
 
     [Space(20)]
     [SerializeField] MMF_Player feedbackimpact;  // 아이템 획득 시 연출

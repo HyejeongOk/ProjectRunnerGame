@@ -55,4 +55,11 @@ public class RandomGenerator
         items.Add(item);
         CalcTotalWeight();
     }
+
+    // 아이템 청소, 비중 초기화
+    public void Clear()
+    {
+        items.Clear();
+        totalweight = 0;
+    }
 }

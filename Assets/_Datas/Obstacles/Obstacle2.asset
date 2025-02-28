@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c9cad26d30fe44585ec1103b1c2ab2, type: 3}
+  m_Name: Obstacle2
+  m_EditorClassIdentifier: 
+  pools:
+  - name: Empty
+    weight: 1
+    obstacleList: []
+  - name: Single
+    weight: 5
+    obstacleList:
+    - {fileID: 8619320517215861680, guid: d97f049661e0c034795713b149420629, type: 3}
+    - {fileID: 4249553638966229876, guid: 098e957a5b54d3f4baea6530bb0d72d8, type: 3}
+    - {fileID: 8979986411634251633, guid: df101410ee9e0c24aa8a4d4989117160, type: 3}
+    - {fileID: 7910699498191293681, guid: 3b5bb05371d91444aa9a6b119c860185, type: 3}
+    - {fileID: 8619320517215861680, guid: ec83e637e7971234fa5c617f53b7e068, type: 3}
+  - name: Double
+    weight: 5
+    obstacleList:
+    - {fileID: 7424176787490981662, guid: 9481497ea0088dc489e07c054090b1ce, type: 3}
+    - {fileID: 5273970638149774027, guid: ebc659757d43bec4785852bb0b8c2d92, type: 3}
+    - {fileID: 1438721163256483510, guid: e944e124df42efe4b9c63e4432e1058e, type: 3}
+  - name: Triple
+    weight: 2
+    obstacleList:
+    - {fileID: 8324015615485997778, guid: db37a6d3dcf14d6429a2250a42990321, type: 3}
+    - {fileID: 7826849843589995231, guid: 637f46f4c8c5ac64a99dc648d034f3e2, type: 3}
+  interval: {x: 10, y: 20}
