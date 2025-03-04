@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871767b7259306745b5ff0ea563bd3d3, type: 3}
   m_Name: Phase_1
   m_EditorClassIdentifier: 
-  Name: "\uC2DC\uC791"
+  displayName: "\uC2DC\uC791!"
   Icon: {fileID: 21300000, guid: 2823f9ce8b7384cd7b7b368c7e10e0a4, type: 3}
   Mileage: 0
   scrollSpeed: 10

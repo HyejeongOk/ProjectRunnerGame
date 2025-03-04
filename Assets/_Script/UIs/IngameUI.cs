@@ -27,15 +27,10 @@ public class IngameUI : MonoBehaviour
 
     }
 
-    // void Start()
-    // {
-    //     ShowInfo("TEST", 5f);
-    // }
-
     void Update()
     {
-        UpdateCoins();
         UpdateMileage();
+        UpdateCoins();
         UpdateLife();
     }
 
@@ -47,11 +42,9 @@ public class IngameUI : MonoBehaviour
 
     public void SetPhase(PhaseSO phase)
     {
-        ShowInfo(phase.Name);
+        ShowInfo(phase.displayName);
     }
 
-    //Sequence _seqInfo;
-    Tween _tweenShowInfo;
     public void ShowInfo(string info, float duration = 1f)
     {
         if (feedbackinformation.IsPlaying)

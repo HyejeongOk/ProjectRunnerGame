@@ -8,7 +8,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data/Phase")]
 public class PhaseSO : ScriptableObject
 {
-    public string Name;
+    public string displayName;
     [Preview(Size.small)] public Sprite Icon;
     public uint Mileage;
 

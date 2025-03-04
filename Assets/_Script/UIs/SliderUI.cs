@@ -51,9 +51,7 @@ public class SliderUI : MonoBehaviour
         if(s == null)
             return;
 
-        var image = imagepools[_imagenum++ % imagepools.Count];
-        //imagepools.Find((i) => i.gameObject.activeSelf == false);
-
+        Image image = imagepools[_imagenum++ % imagepools.Count];
         if(image == null)
         {
             Debug.LogWarning("사용할 수 있는 Image Pool 없음!");
@@ -68,7 +66,7 @@ public class SliderUI : MonoBehaviour
         SetPosition(image, v);
     }
 
-    public void SetPosition(Image image, float percent)
+  public void SetPosition(Image image, float percent)
     {
         float width = sliderRect.rect.width;
         float xpos = sliderRect.rect.xMin + percent * width;

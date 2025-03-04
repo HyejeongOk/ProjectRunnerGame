@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871767b7259306745b5ff0ea563bd3d3, type: 3}
   m_Name: Phase_5
   m_EditorClassIdentifier: 
-  Name: "\uD074\uB9AC\uC5B4!"
+  displayName: "\uD074\uB9AC\uC5B4!"
   Icon: {fileID: 21300000, guid: 6c110e52af6524f0a98a1b3815026a78, type: 3}
-  Mileage: 500
+  Mileage: 700
   scrollSpeed: 0
   obstacleData: {fileID: 11400000, guid: 32787395a2704504798bc23a338521a1, type: 2}

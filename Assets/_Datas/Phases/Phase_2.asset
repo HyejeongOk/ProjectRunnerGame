@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871767b7259306745b5ff0ea563bd3d3, type: 3}
   m_Name: Phase_2
   m_EditorClassIdentifier: 
-  Name: Phase1
+  displayName: Phase 1
   Icon: {fileID: 21300000, guid: 622b387746855489f8dd664488282011, type: 3}
   Mileage: 100
   scrollSpeed: 15
