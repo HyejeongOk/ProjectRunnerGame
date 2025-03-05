@@ -29,8 +29,8 @@ public class ObstacleManager : MonoBehaviour
     // [SerializeField] List<Obstacle> obstacleTriple;
     [SerializeField] float spawnZpos = 60f;
     [SerializeField, ReadOnly] Vector2 spawnInterval;
+    [SerializeField, ReadOnly] ObstacleSO data;
 
-    [ReadOnly] ObstacleSO data;
     private TrackManager trackMgr;
     private RandomGenerator randomGenerator = new RandomGenerator();
 

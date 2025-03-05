@@ -23,18 +23,16 @@ public class PopupUI : MonoBehaviour
     {
          if(Input.GetKeyDown(KeyCode.Escape))
          {
-            if(quit.activeSelf)
+             if(quit.activeSelf)
             {
-                quitClose.PlayFeedbacks();
-
+                QuitClose();
             }
 
             else
             {
-                quitOpen.PlayFeedbacks();
+                QuitOpen();
             }
          }
-        
     }
 
     public void QuitOk()
@@ -49,8 +47,17 @@ public class PopupUI : MonoBehaviour
         #endif
     }
 
-    public void QuitCancel()
+    public void QuitOpen()
+    {
+        quitOpen?.PlayFeedbacks();
+        GameManager.IsPlaying = false;
+        GameManager.IsUiOpened = true;
+    }
+
+    public void QuitClose()
     {
         quitClose?.PlayFeedbacks();
+        GameManager.IsPlaying = true;
+        GameManager.IsUiOpened = false;
     }
 }

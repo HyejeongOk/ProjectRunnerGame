@@ -24,7 +24,7 @@ public class LaneGenerator
         lanePatterns.Add(new LaneZigzag());
 
         
-        foreach( var p in pools)
+        foreach( LanepatternPool p in pools)
             randomGenerator.AddItem(p);
 
         SwitchPattern();
@@ -78,7 +78,8 @@ public class LaneGenerator
 
     public void SwitchPattern(int index = -1)
     {
-        string patternName = randomGenerator.GetRandom().GetItem() as string;
+        // string <-> enum 변환이 가능하다
+        LaneType laneType = (LaneType) randomGenerator.GetRandom().GetItem() ;
 
         // -1 의미? 랜덤으로 발생
         // 0,1 의미? 0,1의 패턴을 정확하게 지명
@@ -98,7 +99,7 @@ public class LaneGenerator
         //     index = Mathf.Clamp(index, 0, lanePatterns.Count-1);
         // }
 
-            Lane lanePattern = lanePatterns.Find(f => f.Name == patternName);
+            Lane lanePattern = lanePatterns.Find(f => f.laneType == laneType);
             currentPattern = lanePattern;
             currentPattern?.Initialize(laneCount);
            

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LaneWave : Lane
 {
-    public string Name => "WavePattern";
+    public LaneType laneType => LaneType.WAVE;
     private LaneData data;
 
     public float amplitude = 2.5f;  // 진폭 (Amplitude)

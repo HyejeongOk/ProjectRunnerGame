@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Unity.VisualScripting;
 using DG.Tweening;
+using NUnit.Framework.Constraints;
 
 public class TrackManager : MonoBehaviour
 {
@@ -44,6 +44,9 @@ public class TrackManager : MonoBehaviour
 
     void Start()
     {
+        GameManager.IsGameOver = true;
+        GameManager.IsPlaying = false;
+
         // 메인 카메라 Transform을 미리 받아온다. 
         camTransform = Camera.main.transform;
 
@@ -63,20 +66,17 @@ public class TrackManager : MonoBehaviour
         SpawnStartZone();
         SpawnPlayer();
 
-       StartCoroutine(CountdownTrack());
+        StartCoroutine(CountdownTrack());
     }
 
     
     void Update()
     {
-        if(GameManager.IsPlaying == false) 
+        if(GameManager.IsPlaying == false || GameManager.IsGameOver == true) 
             return;
 
        RepositionTrack();
        SpawnFinishZone();
-
-       //float sin = Mathf.Sin(Time.time);
-
        BendTrack();
 
        GameManager.mileage += scrollspeed * Time.smoothDeltaTime;
@@ -205,17 +205,26 @@ public class TrackManager : MonoBehaviour
         scrollspeed = 0f;
     }
 
+
     private IEnumerator CountdownTrack()
     {
-        yield return new WaitForSeconds(0.5f);
-         // countdown으로 반복문 처리하기
-        for(int i = countdown; i > 0; i-- )
+        yield return new WaitForEndOfFrame();
+
+        while(true)
         {
-            // Debug.Log(i);
-            uiIngame.ShowInfo($"{i}", 1.5f);
+            yield return new WaitUntil(() => GameManager.IsUiOpened == false);
+
+            uiIngame.ShowInfo($"{countdown--}", 1.5f);
             yield return new WaitForSeconds(1f);
+
+            if(countdown <= 0)
+            {
+                GameManager.IsPlaying = true;
+                GameManager.IsGameOver = false;       
+
+                yield break;
+            }
         }
-        GameManager.IsPlaying = true;
     }
     
      void SpawnPlayer()

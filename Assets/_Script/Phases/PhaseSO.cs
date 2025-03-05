@@ -16,4 +16,7 @@ public class PhaseSO : ScriptableObject
 
     // 장애물(Obstacle) 설정
     [Foldout] public ObstacleSO obstacleData;
+
+    // 아이템(Collectables) 설정 - 코인 폼...
+    [Foldout] public CollectableSO collectableData;
 }

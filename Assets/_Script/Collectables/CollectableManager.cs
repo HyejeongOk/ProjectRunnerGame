@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using CustomInspector;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Rendering;
-
 
 // Serializable : 인스펙터 노출을 위한 내부 작업들은 한다
 [System.Serializable]
@@ -23,27 +22,24 @@ public class CollectablePool : RandomItem
 [System.Serializable]
 public class LanepatternPool : RandomItem
 {
-    public string patternName;
+    public LaneType patternType;
     public override object GetItem()
     {
-        return patternName;
+        return patternType;
     }
 } 
 
 public class CollectableManager : MonoBehaviour
 {
-    [Space(20)]
-    public List<CollectablePool> collectablepools;
+    [SerializeField] CollectableSO data;
+
     private RandomGenerator collectableGenerator = new RandomGenerator();
 
-    public List<LanepatternPool> lanepatternPools;
     private LaneGenerator laneGenerator;
 
     [Space(20)]
     [SerializeField] float spawnZpos = 60f;
     [SerializeField, AsRange(0, 100)] Vector2 spawnInterval; // 개별 스폰 간격
-    
-    [SerializeField, AsRange(0, 30)] Vector2 spawnQuota; // 한 패턴에서 최대 찍을 개수
 
     private TrackManager trackMgr;
 
@@ -56,15 +52,6 @@ public class CollectableManager : MonoBehaviour
             yield break;   // return과 동일 : 함수 완전 탈출
         } 
 
-        yield return new WaitForEndOfFrame();
-
-        // 아이템들 프리팹과 랜덤비중 등록
-        foreach(var pool in collectablepools)
-            collectableGenerator.AddItem(pool);
-
-        // 레인의 패턴과 랜덤비중 등록
-       laneGenerator = new LaneGenerator(trackMgr.laneList.Count, spawnQuota, lanepatternPools);
-
         // yield return new WaitForEndOfFrame();  //  지연 : 1프라임만 지연
         // yield return new WaitForSeconds(2f); // 지연 : 2초 지연
         yield return new WaitUntil( () => GameManager.IsPlaying == true);
@@ -73,8 +60,12 @@ public class CollectableManager : MonoBehaviour
 
     }
 
+    // 아이템 생성 ( lane = 0, 1, 2)
     public void SpawnCollectable()
    {
+        if(data == null)
+            return;
+
         (LaneData lanedata, Collectable prefab) = RandomLanePrefab();
 
         // Z 위치
@@ -99,7 +90,7 @@ public class CollectableManager : MonoBehaviour
         double lastMileage = 0f;
         while(true)
         {   
-            yield return new WaitUntil( () => GameManager.IsPlaying);
+            yield return new WaitUntil( () => GameManager.IsPlaying && data != null);
 
             // 1m 거리 간격 이상일 때만 장애물을 생성한다.
             // 5m - 0m = 5 > 1m 성립 => lastMileage = 5m
@@ -127,5 +118,32 @@ public class CollectableManager : MonoBehaviour
             return (lane, null);
 
         return (lane, prefab);
+   }
+
+   public void SetPhase(PhaseSO phase, float duration = 1f)
+   {
+        if(phase.collectableData == null)
+        {
+            ClearCollectables();
+            return;
+        }
+        data = phase.collectableData;
+        collectableGenerator.Clear();
+
+        // 아이템들 프리팹과 랜덤비중 등록
+        foreach(var pool in data.collectablePools)
+            collectableGenerator.AddItem(pool);
+
+        // 레인의 패턴과 랜덤비중 등록
+        laneGenerator = new LaneGenerator(trackMgr.laneList.Count, data.quota, data.lanepatternPools);
+
+       // 장애물 interval 적용 
+        DOVirtual.Vector2(spawnInterval, data.interval, duration, i => spawnInterval = i).SetEase(Ease.InOutSine);
+   }
+
+   public void ClearCollectables()
+   {
+        data = null;
+        collectableGenerator.Clear();
    }
 }

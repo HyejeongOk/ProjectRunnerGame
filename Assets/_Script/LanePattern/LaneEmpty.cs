@@ -2,7 +2,7 @@
 
 public class LaneEmpty : Lane
 {
-    public string Name => "EmptyPattern";
+    public LaneType laneType => LaneType.EMPTY;
       
     private LaneData data;
 

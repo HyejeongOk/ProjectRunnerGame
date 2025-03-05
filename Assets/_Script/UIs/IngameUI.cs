@@ -29,6 +29,9 @@ public class IngameUI : MonoBehaviour
 
     void Update()
     {
+        if(GameManager.IsPlaying == false || GameManager.IsGameOver ==true) 
+            return;
+
         UpdateMileage();
         UpdateCoins();
         UpdateLife();

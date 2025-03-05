@@ -2,7 +2,7 @@
 
 public class LaneWaveStraight : Lane
 {
-    public string Name => "StraightPattern";
+    public LaneType laneType => LaneType.STRAIGHT;
     
     // // 외부 노출용
     // public int MaxLane {get {return _maxLane ; } set {_maxLane = value;} }  
