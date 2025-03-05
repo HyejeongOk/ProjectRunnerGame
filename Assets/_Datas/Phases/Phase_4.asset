@@ -17,4 +17,4 @@ MonoBehaviour:
   Mileage: 450
   scrollSpeed: 20
   obstacleData: {fileID: 11400000, guid: 32787395a2704504798bc23a338521a1, type: 2}
-  collectableData: {fileID: 11400000, guid: 83db121f2126cba418a450b947c02aa9, type: 2}
+  collectableData: {fileID: 0}

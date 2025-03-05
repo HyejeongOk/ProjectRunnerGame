@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3581916157544937819
+--- !u!114 &-7780078659523562244
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CurvedMaterial
+  m_Name: InvincibleMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 78985bb45a1690b44b9080e57150223f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -42,7 +42,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Base_Texture:
-        m_Texture: {fileID: 2800000, guid: 610f4792f3eafd149a989e8e3a0d70c7, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionTexture:
-        m_Texture: {fileID: 2800000, guid: 20befdbefe128334f85647ec374851d9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -109,15 +109,18 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
+    - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _Fresnel: 2
+    - _FresnelPower: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -128,23 +131,26 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _Wave: 0
+    - _Surface: 1
     - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
+    - _invincible: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Base_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Base_Color: {r: 0.6698113, g: 0.64654475, b: 0.37597895, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _CurveAmount: {r: -0.009604896, g: -0.13688178, b: 0, a: 0}
-    - _EmissionColor: {r: 8, g: 5.0509806, b: 0, a: 1}
-    - _ImpactColor: {r: 1, g: 0.9710145, b: 0, a: 1}
-    - _Offset: {r: -0, g: -0, b: 0, a: 0}
+    - _CurveAmount: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Fresbek_Color: {r: 0, g: 0, b: 0, a: 0}
+    - _FresnelColor: {r: 0.5, g: 0, b: 0, a: 0.20392157}
+    - _ImpactColor: {r: 1, g: 0.17789973, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Phase_1
   m_EditorClassIdentifier: 
   displayName: "\uC2DC\uC791!"
-  Icon: {fileID: 21300000, guid: 2823f9ce8b7384cd7b7b368c7e10e0a4, type: 3}
+  Icon: {fileID: 0}
   Mileage: 0
   scrollSpeed: 10
   obstacleData: {fileID: 11400000, guid: 32787395a2704504798bc23a338521a1, type: 2}

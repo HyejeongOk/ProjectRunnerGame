@@ -3,6 +3,8 @@ using CustomInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 
 public class PhaseManager : MonoBehaviour
@@ -20,6 +22,8 @@ public class PhaseManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        GameManager.Reset();
+
         trackMgr = FindFirstObjectByType<TrackManager>();
         obstacleMgr = FindFirstObjectByType<ObstacleManager>();
         colMgr = FindFirstObjectByType<CollectableManager>();
@@ -56,7 +60,7 @@ public class PhaseManager : MonoBehaviour
                 GameClear(phase);
                 yield break;
             }
-                   
+         
             yield return new WaitForSeconds(updateInterval);
         }
     }
@@ -67,8 +71,6 @@ public class PhaseManager : MonoBehaviour
 
         GameManager.mileageFinish = phaseEnd.Mileage;
     }
-
-
 
     void SetPhase(PhaseSO phase)
     {

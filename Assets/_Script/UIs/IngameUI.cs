@@ -5,6 +5,7 @@ using DG.Tweening;
 using CustomInspector;
 using MoreMountains.Feedbacks;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class IngameUI : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class IngameUI : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.IsPlaying == false || GameManager.IsGameOver ==true) 
+        if(GameManager.IsPlaying == false || GameManager.IsGameOver == true) 
             return;
 
         UpdateMileage();
@@ -142,7 +143,9 @@ public class IngameUI : MonoBehaviour
         if(GameManager.life <= 0)
         {
             ShowInfo("GAME OVER", 5f);
+
             GameManager.IsGameOver = true;
+            DOVirtual.DelayedCall(5f, () => SceneManager.LoadScene(0));
         }
 
         lastLife = GameManager.life;

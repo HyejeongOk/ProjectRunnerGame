@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectablePools:
   - name: Coin1
-    weight: 1
+    weight: 10
     collectable: {fileID: 4565585837996118596, guid: 7400e290b424fe747937d02d01bc3335, type: 3}
   lanepatternPools:
   - name: StraightPattern
-    weight: 1
-    patternName: 1
+    weight: 3
+    patternType: 1
+  - name: WavePattern
+    weight: 2
+    patternType: 2
   interval: {x: 3, y: 3}
   quota: {x: 8, y: 8}

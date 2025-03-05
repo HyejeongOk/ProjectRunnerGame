@@ -4,7 +4,14 @@ using DG.Tweening;
 using Deform;
 using MoreMountains.Feedbacks;
 
-public enum PlayerState {Idle = 0, Move, Jump, Slide};
+public enum PlayerMove {Idle = 0, Move, Jump, Slide}
+// int 4byte = 32bit 0000 0000 .... 0000 0000
+public enum PlayerState
+{
+    INVINCIBLE = 1 << 0,
+    MAGNETIC = 1 << 1, 
+    MULTIFPLE = 1 << 2
+}
 
 public class PlayerControl : MonoBehaviour
 {
@@ -33,12 +40,13 @@ public class PlayerControl : MonoBehaviour
     [Space(20)]
     [SerializeField] MMF_Player feedbackimpact;  // 아이템 획득 시 연출
     [SerializeField] MMF_Player feedbackCrash;  // 장애물 충돌 시 연출
+    [SerializeField] MMF_Player feedbackInvincible;  // 무적효과 연출
 
 
     // 다른 클래스에 공개는 하지만 인스펙터 노출 안함
     [HideInInspector] public TrackManager trackMgr;
 
-    [SerializeField] PlayerState state;
+    [SerializeField] PlayerMove state;
 
 
     // 내부 사용 : 인스펙터 노출 안함
@@ -52,21 +60,9 @@ public class PlayerControl : MonoBehaviour
         SwitchCollider(true);
     }
 
-    // b : TRUE -> 기본모드, FALSE -> 슬라이드
-    void SwitchCollider(bool b)
-    {
-        colNormal.gameObject.SetActive(b);
-        colSlide.gameObject.SetActive(!b);
-    }
-
     void Update()
     {
-        // [CHEAT]
-        // 1 키 토글, 처음 => 멈춤, 다시 => 재개
-        if (GameManager.IsGameOver == false && Input.GetKeyDown(KeyCode.Alpha1))
-            GameManager.IsPlaying = !GameManager.IsPlaying;
-
-        if (pivot == null || GameManager.IsPlaying == false)
+        if (pivot == null || GameManager.IsPlaying == false || GameManager.IsGameOver == true)
             return;
 
         if (Input.GetButtonDown("Left") && currentLane > 0)
@@ -91,11 +87,10 @@ public class PlayerControl : MonoBehaviour
             other.GetComponentInParent<Collectable>()?.Collect();            
         }
 
-        else if (other.tag == "Obstacle")
-        {
+        else if (other.tag == "Obstacle"&& !GameManager.playerstate.HasAny(PlayerState.INVINCIBLE))
+        { 
             feedbackCrash?.PlayFeedbacks();
-            GameManager.life -= 1;
-            GameManager.IsPlaying = false;
+            feedbackInvincible?.PlayFeedbacks();
         }
         other.enabled = false;
     }
@@ -105,16 +100,16 @@ public class PlayerControl : MonoBehaviour
     // direction -1 이면 왼쪽 , +1 이면 오른쪽
     void HandleDirection(int direction)
     {
-        if ( state == PlayerState.Jump || state == PlayerState.Slide ) return;
+        if ( state == PlayerMove.Jump || state == PlayerMove.Slide ) return;
 
-        state = PlayerState.Move;
+        state = PlayerMove.Move;
 
         var squash = direction switch { -1 => deformLeft, 1 => deformRight, _ => null };
 
         if (_seqMove != null)
         {
             _seqMove.Kill(true);
-            state = PlayerState.Move;
+            state = PlayerMove.Move;
         }
 
 
@@ -126,7 +121,7 @@ public class PlayerControl : MonoBehaviour
 
         targetpos = new Vector3(l.position.x, pivot.position.y , pivot.position.z );
 
-        _seqMove = DOTween.Sequence().OnComplete(()=> {squash.Factor = 0; state = PlayerState.Idle; });
+        _seqMove = DOTween.Sequence().OnComplete(()=> {squash.Factor = 0; state = PlayerMove.Idle; });
         _seqMove.Append(pivot.DOMove(targetpos, moveDuration));
         _seqMove.Join(DOVirtual.Float(0f, 1f, moveDuration/2f, (v)=> squash.Factor = v ));
         _seqMove.Append(DOVirtual.Float(1f, 0f, moveDuration/2f, (v)=> squash.Factor = v ));
@@ -134,9 +129,9 @@ public class PlayerControl : MonoBehaviour
 
     void HandleJump()
     {
-        if ( state != PlayerState.Idle ) return;
+        if ( state != PlayerMove.Idle ) return;
 
-        state = PlayerState.Jump;
+        state = PlayerMove.Jump;
 
         pivot.DOLocalJump(targetpos, jumpHeight, 1, jumpDuration)
                 .SetEase(jumpEase);
@@ -144,7 +139,7 @@ public class PlayerControl : MonoBehaviour
         deformJumpUp.Factor = 0f;
         deformJumpDown.Factor = 0f;  
 
-        Sequence seq = DOTween.Sequence().OnComplete( ()=> state = PlayerState.Idle );
+        Sequence seq = DOTween.Sequence().OnComplete( ()=> state = PlayerMove.Idle );
         seq.Append(DOVirtual.Float( 0f, 1f, jumpDuration * jumpIntervals[0], v => deformJumpUp.Factor = v ));
         seq.Append(DOVirtual.Float( 1f, 0f, jumpDuration * jumpIntervals[1], v => deformJumpUp.Factor = v ));        
         seq.Join(DOVirtual.Float( 0f, -0.25f, jumpDuration * jumpIntervals[2], v => deformJumpDown.Factor = v ));
@@ -153,17 +148,43 @@ public class PlayerControl : MonoBehaviour
 
     void HandleSlide()
     {
-        if ( state != PlayerState.Idle ) return;
+        if ( state != PlayerMove.Idle ) return;
 
-        state = PlayerState.Slide;
+        state = PlayerMove.Slide;
         SwitchCollider(false);
 
         Sequence seq = DOTween.Sequence().OnComplete( ()=> 
-        {   state = PlayerState.Idle;
+        {   state = PlayerMove.Idle;
             SwitchCollider(true);
         });
         seq.Append(DOVirtual.Float( 0f, -0.15f, slideDuration, v => deformSlide.Factor = v ));
+        seq.AppendInterval(slideDuration * 0.25f);
         seq.Append(DOVirtual.Float( -0.15f, 0f, slideDuration, v => deformSlide.Factor = v ));
     }
 
+    // b : TRUE -> 기본모드, FALSE -> 슬라이드
+    void SwitchCollider(bool b)
+    {
+        colNormal.gameObject.SetActive(b);
+        colSlide.gameObject.SetActive(!b);
+    }
+
+    public void OnCrash(bool b)
+    {
+        if(b)
+        {
+            GameManager.life -= 1;
+        }
+
+        GameManager.IsPlaying = !b;
+    }
+
+    // TRUE : 무적모드, FALSE : 일반모드
+    public void Invincible(bool b)
+    {
+        if (b)
+            GameManager.playerstate |= PlayerState.INVINCIBLE; // 추가
+        else   
+            GameManager.playerstate &= ~PlayerState.INVINCIBLE; // 추가
+    }
 }
