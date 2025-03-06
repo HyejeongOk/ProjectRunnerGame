@@ -25,9 +25,15 @@ public class PhaseManager : MonoBehaviour
         GameManager.Reset();
 
         trackMgr = FindFirstObjectByType<TrackManager>();
+        yield return new WaitUntil(() => trackMgr != null);
         obstacleMgr = FindFirstObjectByType<ObstacleManager>();
+        yield return new WaitUntil(() => obstacleMgr != null);
         colMgr = FindFirstObjectByType<CollectableManager>();
+        yield return new WaitUntil(() => colMgr != null);
         uiIngame = FindFirstObjectByType<IngameUI>();
+        yield return new WaitUntil(() => uiIngame != null);
+
+        yield return new WaitForEndOfFrame();
 
         GetFinishline();
 
@@ -86,5 +92,7 @@ public class PhaseManager : MonoBehaviour
 
         GameManager.IsPlaying = false;
         GameManager.IsGameOver = true;
+
+        DOVirtual.DelayedCall(5f, () => SceneManager.LoadScene(0));
     }
 }

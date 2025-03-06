@@ -10,18 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72c96f4225343b144a064567170e3766, type: 3}
-  m_Name: Coin1_Straight
+  m_Name: Coin2
   m_EditorClassIdentifier: 
   collectablePools:
   - name: Coin1
     weight: 10
     collectable: {fileID: 4565585837996118596, guid: 7400e290b424fe747937d02d01bc3335, type: 3}
+  - name: Coin2
+    weight: 5
+    collectable: {fileID: 4565585837996118596, guid: bf2f7adac9a909b41a2aa16328c07765, type: 3}
   lanepatternPools:
-  - name: StraightPattern
-    weight: 3
-    patternType: 1
+  - name: Zigzag
+    weight: 5
+    patternType: 3
   - name: WavePattern
-    weight: 2
+    weight: 5
     patternType: 2
+  - name: StraightPattern
+    weight: 5
+    patternType: 1
   interval: {x: 3, y: 3}
   quota: {x: 8, y: 8}

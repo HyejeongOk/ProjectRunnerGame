@@ -31,7 +31,7 @@ public class LanepatternPool : RandomItem
 
 public class CollectableManager : MonoBehaviour
 {
-    [SerializeField] CollectableSO data;
+    private CollectableSO data;
 
     private RandomGenerator collectableGenerator = new RandomGenerator();
 

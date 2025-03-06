@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871767b7259306745b5ff0ea563bd3d3, type: 3}
   m_Name: Phase_1
   m_EditorClassIdentifier: 
-  displayName: "\uC2DC\uC791!"
-  Icon: {fileID: 0}
-  Mileage: 0
-  scrollSpeed: 10
-  obstacleData: {fileID: 11400000, guid: 32787395a2704504798bc23a338521a1, type: 2}
+  displayName: Level1
+  Icon: {fileID: 21300000, guid: 1e0204e4d32684272b7718888c21dd55, type: 3}
+  Mileage: 100
+  scrollSpeed: 15
+  obstacleData: {fileID: 11400000, guid: 9bce233e27b8f2a4fa63c199f8fd97c7, type: 2}
   collectableData: {fileID: 11400000, guid: 83db121f2126cba418a450b947c02aa9, type: 2}
