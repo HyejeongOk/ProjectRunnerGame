@@ -357,7 +357,7 @@ MonoBehaviour:
         LoopAtLastPause: 1
         LoopAtLastLoopStart: 1
         InfiniteLoop: 0
-        NumberOfLoops: 6
+        NumberOfLoops: 4
         NumberOfLoopsLeft: 1
         InInfiniteLoop: 0
         TriggerMMFeedbacksEvents: 1
